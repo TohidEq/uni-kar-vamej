@@ -1,9 +1,16 @@
+import getSearchResult from "@/lib/getSearchResult";
+import { ALL_SITES, ALL_SITES_FUNC } from "@/lib/globalVars";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const keyword = searchParams.get("keyword");
-  const startSalary = searchParams.get("startSalary");
+  const denySites = searchParams.get("denySites")?.split(",") || [];
+
+  // Remove sites that are Denied
+  const searchableSites = [...ALL_SITES.freelancer, ...ALL_SITES.job].filter(
+    (item) => !denySites.includes(item)
+  );
 
   if (!keyword) {
     return NextResponse.json(
@@ -23,10 +30,24 @@ export async function GET(request: Request) {
     owner: "",
     location: "",
     jobType: null,
+    url: "",
   };
 
-  return new Response(JSON.stringify({ keyword, startSalary, a }), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
+  const testtt = getSearchResult({
+    keyword: keyword,
+    searchableSites: searchableSites,
   });
+
+  return new Response(
+    JSON.stringify({
+      keyword,
+      a,
+      searchableSites: searchableSites,
+      testtt,
+    }),
+    {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    }
+  );
 }

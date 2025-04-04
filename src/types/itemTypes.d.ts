@@ -1,7 +1,7 @@
 export {};
 
 declare global {
-  export interface FreelancerItem {
+  interface FreelancerItem {
     url: string;
     title: string;
     caption: ?string;
@@ -11,7 +11,7 @@ declare global {
     owner: string;
   }
 
-  export interface JobItem {
+  interface JobItem {
     url: string;
     title: string;
     caption: ?string;
@@ -25,18 +25,19 @@ declare global {
     jobType: ?string;
   }
 
-  export interface SavedJobItem {
+  interface SavedJobItem {
     id: string; // url
     Item: JobItem;
     created_at: Date;
   }
-  export interface SavedFreelancerItem {
+
+  interface SavedFreelancerItem {
     id: string; // url
     Item: FreelancerItem;
     created_at: Date;
   }
 
-  export interface SavedItems {
+  interface SavedItems {
     jobItems: ?SavedJobItem[];
     freelancerItems: ?SavedFreelancerItem[];
   }
