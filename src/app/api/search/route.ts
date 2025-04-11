@@ -19,20 +19,6 @@ export async function GET(request: Request) {
     );
   }
 
-  const a: JobItem = {
-    title: "",
-    caption: null,
-    salary: 0,
-    salaryStart: 0,
-    salaryEnd: 0,
-    image: null,
-    time: null,
-    owner: "",
-    location: "",
-    jobType: null,
-    url: "",
-  };
-
   const searchedResult = await getSearchResult({
     keyword: keyword,
     searchableSites: searchableSites,

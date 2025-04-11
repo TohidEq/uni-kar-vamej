@@ -17,8 +17,8 @@ declare global {
     title: string;
     caption: ?string;
     salary: number;
-    salaryStart: number;
-    salaryEnd: number;
+    salaryStart: ?number;
+    salaryEnd: ?number;
     image: ?string; // img url
     time: ?string;
     owner: string;

@@ -1,11 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import puppeteer from "puppeteer";
 import * as cheerio from "cheerio";
-import { NextResponse } from "next/server";
 import { searchUrl } from "@/lib/searchUrl";
 import { parseSalary } from "@/lib/parseSalary";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function getKarlancerAll(
   keyword: string
 ): Promise<FreelancerItem[] | null> {
@@ -67,7 +64,7 @@ async function getKarlancerAll(
 
     // Close the browser
     await browser.close();
-  } catch (error: unknown) {
+  } catch (error) {
     console.error("Error scraping Karlancer:");
     console.error(error);
   } finally {

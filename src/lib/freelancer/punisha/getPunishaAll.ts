@@ -1,11 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import puppeteer from "puppeteer";
 import * as cheerio from "cheerio";
-import { NextResponse } from "next/server";
 import { searchUrl } from "@/lib/searchUrl";
 import { parseSalary } from "@/lib/parseSalary";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function getPunishaAll(
   keyword: string
 ): Promise<FreelancerItem[] | null> {
@@ -13,7 +10,6 @@ async function getPunishaAll(
 
   const browser = await puppeteer.launch({ headless: true });
   try {
-    // Launch headless browser
     const page = await browser.newPage();
     await page.goto(searchUrl(keyword, "punisha"), {
       waitUntil: "load",
@@ -28,7 +24,7 @@ async function getPunishaAll(
     $(".css-4obuzx>.breakpoint").each((i, element) => {
       const item: FreelancerItem = {
         type: "punisha",
-        url: `https://ponisha.ir/${$(element)
+        url: `https://ponisha.ir${$(element)
           .find("a.css-f8mog2")
           .attr("href")}`,
         title: $(element).find(".MuiTypography-h4.css-1lu0tb8").text().trim(),
@@ -60,7 +56,7 @@ async function getPunishaAll(
         items.push(item);
       }
     });
-  } catch (error: unknown) {
+  } catch (error) {
     console.error("Error scraping Ponisha:");
     console.error(error);
   } finally {
