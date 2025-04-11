@@ -3,6 +3,7 @@ import puppeteer from "puppeteer";
 import * as cheerio from "cheerio";
 import { NextResponse } from "next/server";
 import { searchUrl } from "@/lib/searchUrl";
+import { parseSalary } from "@/lib/parseSalary";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function getKarlancerAll(
@@ -10,12 +11,15 @@ async function getKarlancerAll(
 ): Promise<FreelancerItem[] | null> {
   // Array to store freelancer items
   const freelancerItems: FreelancerItem[] = [];
+  const browser = await puppeteer.launch({ headless: true });
 
   try {
     // Launch headless browser
-    const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
-    await page.goto(searchUrl(keyword, "karlancer"));
+    await page.goto(searchUrl(keyword, "karlancer"), {
+      waitUntil: "load",
+      timeout: 0,
+    });
 
     // Get the rendered HTML
     const html = await page.content();
@@ -47,7 +51,7 @@ async function getKarlancerAll(
           $(element)
             .find(".px-10.py-2px.fs-14.br-5.color-white.bg-acacac-color")
             .text()
-            .trim() || "Unknown",
+            .trim() || "ناشناخته",
       };
 
       // Only add if required fields (url, title, salary, owner) are present
@@ -66,29 +70,12 @@ async function getKarlancerAll(
   } catch (error: unknown) {
     console.error("Error scraping Karlancer:");
     console.error(error);
+  } finally {
+    await browser.close();
   }
 
   if (freelancerItems.length === 0) return null;
   return freelancerItems;
-}
-
-function parseSalary(persianString: string): number {
-  // Map of Persian digits to English digits
-  const persianDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
-  const englishDigits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-
-  let cleanedString = persianString
-    .replace(/تومان/g, "") // حذف "تومان"
-    .replace(/,/g, ""); // حذف جداکننده هزارگان فارسی
-
-  for (let i = 0; i < persianDigits.length; i++) {
-    cleanedString = cleanedString.replace(
-      new RegExp(persianDigits[i], "g"),
-      englishDigits[i]
-    );
-  }
-
-  return parseInt(cleanedString, 10);
 }
 
 export default getKarlancerAll;

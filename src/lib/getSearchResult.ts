@@ -1,4 +1,5 @@
 import getKarlancerAll from "./freelancer/karlancer/getKarlancerAll";
+import getPunishaAll from "./freelancer/punisha/getPunishaAll";
 import { ALL_SITES } from "./globalVars";
 
 export default async function getSearchResult(Props: SearchProps) {
@@ -14,14 +15,19 @@ export default async function getSearchResult(Props: SearchProps) {
     switch (site) {
       // ==== FREELANCERS ====
       case ALL_SITES["freelancer"][0]: {
-        const karlancerAll_results = await getKarlancerAll(Props.keyword);
-        if (karlancerAll_results?.length) {
-          results.freelancers.push(...karlancerAll_results);
+        const karlancerResults = await getKarlancerAll(Props.keyword);
+        if (karlancerResults?.length) {
+          results.freelancers.push(...karlancerResults);
         }
+
         break;
       }
       case ALL_SITES["freelancer"][1]: {
-        // Add logic for the second freelancer site here
+        // Assuming Ponisha is the second freelancer site
+        const ponishaResults = await getPunishaAll(Props.keyword);
+        if (ponishaResults?.length) {
+          results.freelancers.push(...ponishaResults);
+        }
         break;
       }
       // ======= JOBS ========
