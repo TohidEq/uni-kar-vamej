@@ -2,6 +2,7 @@ export {};
 
 declare global {
   interface FreelancerItem {
+    type: string;
     url: string;
     title: string;
     caption: ?string;

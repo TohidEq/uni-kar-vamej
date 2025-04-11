@@ -1,5 +1,5 @@
 import getSearchResult from "@/lib/getSearchResult";
-import { ALL_SITES, ALL_SITES_FUNC } from "@/lib/globalVars";
+import { ALL_SITES } from "@/lib/globalVars";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -33,7 +33,7 @@ export async function GET(request: Request) {
     url: "",
   };
 
-  const testtt = getSearchResult({
+  const searchedResult = await getSearchResult({
     keyword: keyword,
     searchableSites: searchableSites,
   });
@@ -43,7 +43,7 @@ export async function GET(request: Request) {
       keyword,
       a,
       searchableSites: searchableSites,
-      testtt,
+      ...searchedResult,
     }),
     {
       status: 200,

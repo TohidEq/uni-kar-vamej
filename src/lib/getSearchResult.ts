@@ -1,51 +1,42 @@
 import getKarlancerAll from "./freelancer/karlancer/getKarlancerAll";
 import { ALL_SITES } from "./globalVars";
 
-export default function getSearchResult(Props: SearchProps) {
-  const test: { jobs: JobItem[]; freelancers: FreelancerItem[] } = {
+export default async function getSearchResult(Props: SearchProps) {
+  const results: { jobs: JobItem[]; freelancers: FreelancerItem[] } = {
     jobs: [],
     freelancers: [],
   };
 
-  Props.searchableSites.forEach((site) => {
+  for (const site of Props.searchableSites) {
     console.log("site:", site);
     console.log("keyword:", Props.keyword);
+
     switch (site) {
+      // ==== FREELANCERS ====
       case ALL_SITES["freelancer"][0]: {
-        getKarlancerAll(Props.keyword).forEach((freelancerItem) => {
-          test.freelancers.push(freelancerItem);
-        });
+        const karlancerAll_results = await getKarlancerAll(Props.keyword);
+        if (karlancerAll_results?.length) {
+          results.freelancers.push(...karlancerAll_results);
+        }
         break;
       }
       case ALL_SITES["freelancer"][1]: {
+        // Add logic for the second freelancer site here
         break;
       }
-      case ALL_SITES["freelancer"][2]: {
-        break;
-      }
-      case ALL_SITES["freelancer"][3]: {
-        break;
-      }
+      // ======= JOBS ========
       case ALL_SITES["job"][0]: {
+        // Add logic for the first job site here
         break;
       }
       case ALL_SITES["job"][1]: {
+        // Add logic for the second job site here
         break;
       }
-      case ALL_SITES["job"][2]: {
-        break;
-      }
-      case ALL_SITES["job"][3]: {
-        break;
-      }
-      case ALL_SITES["job"][4]: {
-        break;
-      }
-      case ALL_SITES["job"][5]: {
-        break;
-      }
+      default:
+        console.warn(`No handler for site: ${site}`);
     }
-  });
+  }
 
-  return test;
+  return results;
 }
