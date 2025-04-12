@@ -2,13 +2,19 @@ import puppeteer from "puppeteer";
 import * as cheerio from "cheerio";
 import { searchUrl } from "@/lib/searchUrl";
 import { parseSalary } from "@/lib/parseSalary";
+import Chromium from "@sparticuz/chromium-min";
+import { remoteExecutablePath } from "@/lib/globalVars";
 
 async function getPunishaAll(
   keyword: string
 ): Promise<FreelancerItem[] | null> {
   const items: FreelancerItem[] = [];
 
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: Chromium.args,
+    executablePath: await Chromium.executablePath(remoteExecutablePath),
+  });
   try {
     const page = await browser.newPage();
     await page.goto(searchUrl(keyword, "punisha"), {

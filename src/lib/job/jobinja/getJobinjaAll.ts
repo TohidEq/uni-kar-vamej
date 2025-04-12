@@ -1,6 +1,8 @@
 import puppeteer from "puppeteer";
 import * as cheerio from "cheerio";
 import { searchUrl } from "@/lib/searchUrl";
+import Chromium from "@sparticuz/chromium-min";
+import { remoteExecutablePath } from "@/lib/globalVars";
 
 function cleanJobType(jobTypeText: string): string | null {
   // حذف خطوط جدید، فضاهای اضافی و متن حقوق
@@ -20,7 +22,8 @@ export default async function getJobinjaAll(
 
   const browser = await puppeteer.launch({
     headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    args: Chromium.args,
+    executablePath: await Chromium.executablePath(remoteExecutablePath),
   });
   try {
     const page = await browser.newPage();

@@ -2,6 +2,8 @@ import puppeteer from "puppeteer";
 import * as cheerio from "cheerio";
 import { searchUrl } from "@/lib/searchUrl";
 import { setTimeout } from "timers/promises";
+import Chromium from "@sparticuz/chromium-min";
+import { remoteExecutablePath } from "@/lib/globalVars";
 
 function parseSalaryRange(salaryText: string): {
   starts: number;
@@ -56,7 +58,8 @@ export default async function getJobvisionAll(
   const items: JobItem[] = [];
   const browser = await puppeteer.launch({
     headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    args: Chromium.args,
+    executablePath: await Chromium.executablePath(remoteExecutablePath),
   });
 
   try {
