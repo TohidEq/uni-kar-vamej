@@ -1,4 +1,4 @@
-import puppeteer from "puppeteer";
+import puppeteerCore from "puppeteer-core";
 import * as cheerio from "cheerio";
 import { searchUrl } from "@/lib/searchUrl";
 import { parseSalary } from "@/lib/parseSalary";
@@ -10,7 +10,7 @@ async function getPunishaAll(
 ): Promise<FreelancerItem[] | null> {
   const items: FreelancerItem[] = [];
 
-  const browser = await puppeteer.launch({
+  const browser = await puppeteerCore.launch({
     headless: true,
     args: Chromium.args,
     executablePath: await Chromium.executablePath(remoteExecutablePath),

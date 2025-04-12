@@ -1,18 +1,16 @@
-import puppeteer from "puppeteer";
+import puppeteerCore from "puppeteer-core";
 import * as cheerio from "cheerio";
 import { searchUrl } from "@/lib/searchUrl";
 import { parseSalary } from "@/lib/parseSalary";
 import Chromium from "@sparticuz/chromium-min";
 import { remoteExecutablePath } from "@/lib/globalVars";
 
-
-
 async function getKarlancerAll(
   keyword: string
 ): Promise<FreelancerItem[] | null> {
   // Array to store freelancer items
   const freelancerItems: FreelancerItem[] = [];
-  const browser = await puppeteer.launch({
+  const browser = await puppeteerCore.launch({
     headless: true,
     args: Chromium.args,
     executablePath: await Chromium.executablePath(remoteExecutablePath),

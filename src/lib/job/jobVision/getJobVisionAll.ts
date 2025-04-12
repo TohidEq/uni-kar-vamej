@@ -1,4 +1,4 @@
-import puppeteer from "puppeteer";
+import puppeteerCore from "puppeteer-core";
 import * as cheerio from "cheerio";
 import { searchUrl } from "@/lib/searchUrl";
 import { setTimeout } from "timers/promises";
@@ -56,7 +56,7 @@ export default async function getJobvisionAll(
   keyword: string
 ): Promise<JobItem[] | null> {
   const items: JobItem[] = [];
-  const browser = await puppeteer.launch({
+  const browser = await puppeteerCore.launch({
     headless: true,
     args: Chromium.args,
     executablePath: await Chromium.executablePath(remoteExecutablePath),

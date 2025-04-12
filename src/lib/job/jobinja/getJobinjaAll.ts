@@ -1,4 +1,4 @@
-import puppeteer from "puppeteer";
+import puppeteerCore from "puppeteer-core";
 import * as cheerio from "cheerio";
 import { searchUrl } from "@/lib/searchUrl";
 import Chromium from "@sparticuz/chromium-min";
@@ -20,7 +20,7 @@ export default async function getJobinjaAll(
 ): Promise<JobItem[] | null> {
   const items: JobItem[] = [];
 
-  const browser = await puppeteer.launch({
+  const browser = await puppeteerCore.launch({
     headless: true,
     args: Chromium.args,
     executablePath: await Chromium.executablePath(remoteExecutablePath),
