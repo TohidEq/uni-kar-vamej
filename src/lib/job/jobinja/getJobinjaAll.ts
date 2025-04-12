@@ -29,7 +29,7 @@ export default async function getJobinjaAll(
     );
     await page.goto(searchUrl(keyword, "jobinja"), {
       waitUntil: "networkidle2",
-      timeout: 0,
+      timeout: 10000,
     });
     // Handle lazyLoad(if exist)
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
@@ -38,7 +38,10 @@ export default async function getJobinjaAll(
 
     $(".c-jobListView__list .c-jobListView__item").each((i, element) => {
       const item: JobItem = {
-        url: $(element).find(".c-jobListView__titleLink").attr("href") || "",
+        type: "jobinja",
+        url:
+          $(element).find(".c-jobListView__titleLink").attr("href") ||
+          "https://jobinja.ir/",
         title: $(element)
           .find(".c-jobListView__titleLink")
           .text()
@@ -63,14 +66,14 @@ export default async function getJobinjaAll(
             .eq(0)
             .find("span")
             .text()
-            .trim() || "Unknown",
+            .trim() || "ناشناس",
         location:
           $(element)
             .find(".c-jobListView__metaItem")
             .eq(1)
             .find("span")
             .text()
-            .trim() || "Unknown",
+            .trim() || null,
         jobType: cleanJobType(
           $(element)
             .find(".c-jobListView__metaItem")

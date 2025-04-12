@@ -13,6 +13,7 @@ declare global {
   }
 
   interface JobItem {
+    type: string;
     url: string;
     title: string;
     caption: ?string;
@@ -22,7 +23,7 @@ declare global {
     image: ?string; // img url
     time: ?string;
     owner: string;
-    location: string;
+    location: ?string;
     jobType: ?string;
   }
 

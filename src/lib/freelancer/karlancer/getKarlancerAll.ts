@@ -57,11 +57,6 @@ async function getKarlancerAll(
       }
     });
 
-    // Output the results
-    //console.log("r=========");
-    //console.log(freelancerItems);
-    //console.log(JSON.stringify(freelancerItems, null, 2));
-
     // Close the browser
     await browser.close();
   } catch (error) {

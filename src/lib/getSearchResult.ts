@@ -2,6 +2,7 @@ import getKarlancerAll from "./freelancer/karlancer/getKarlancerAll";
 import getPunishaAll from "./freelancer/punisha/getPunishaAll";
 import { ALL_SITES } from "./globalVars";
 import getJobinjaAll from "./job/jobinja/getJobinjaAll";
+import getJobvisionAll from "./job/jobVision/getJobVisionAll";
 
 export default async function getSearchResult(Props: SearchProps) {
   const results: { jobs: JobItem[]; freelancers: FreelancerItem[] } = {
@@ -9,9 +10,9 @@ export default async function getSearchResult(Props: SearchProps) {
     freelancers: [],
   };
 
+  console.log("keyword:", Props.keyword);
   for (const site of Props.searchableSites) {
     console.log("site:", site);
-    console.log("keyword:", Props.keyword);
 
     switch (site) {
       // ==== FREELANCERS ====
@@ -39,7 +40,11 @@ export default async function getSearchResult(Props: SearchProps) {
         break;
       }
       case ALL_SITES["job"][1]: {
-        // Add logic for the second job site here
+        const jobVisionResults = await getJobvisionAll(Props.keyword);
+        if (jobVisionResults?.length) {
+          results.jobs.push(...jobVisionResults);
+        }
+        break;
         break;
       }
       default:
