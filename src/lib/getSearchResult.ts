@@ -4,7 +4,7 @@ import { ALL_SITES } from "./globalVars";
 import getJobinjaAll from "./job/jobinja/getJobinjaAll";
 import getJobvisionAll from "./job/jobVision/getJobVisionAll";
 
-export default async function getSearchResult(Props: SearchProps) {
+export default async function getSearchResult(Props: SearchProps): Promise<{ jobs: JobItem[]; freelancers: FreelancerItem[]; }> {
   const results: { jobs: JobItem[]; freelancers: FreelancerItem[] } = {
     jobs: [],
     freelancers: [],
