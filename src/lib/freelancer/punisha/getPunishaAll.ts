@@ -4,17 +4,24 @@ import { searchUrl } from "@/lib/searchUrl";
 import { parseSalary } from "@/lib/parseSalary";
 import Chromium from "@sparticuz/chromium-min";
 import { remoteExecutablePath } from "@/lib/globalVars";
+import puppeteer from "puppeteer";
 
 async function getPunishaAll(
   keyword: string
 ): Promise<FreelancerItem[] | null> {
   const items: FreelancerItem[] = [];
-
-  const browser = await puppeteerCore.launch({
-    headless: true,
-    args: Chromium.args,
-    executablePath: await Chromium.executablePath(remoteExecutablePath),
-  });
+  
+  const browser =
+    process.env.NEXT_PUBLIC_VERCEL_ENVIRONMENT === "production"
+      ? await puppeteerCore.launch({
+          headless: true,
+          args: Chromium.args,
+          executablePath: await Chromium.executablePath(remoteExecutablePath),
+        })
+      : await puppeteer.launch({
+          headless: true,
+          args: ["--no-sandbox", "--disable-setuid-sandbox"],
+        });
   try {
     const page = await browser.newPage();
     await page.goto(searchUrl(keyword, "punisha"), {

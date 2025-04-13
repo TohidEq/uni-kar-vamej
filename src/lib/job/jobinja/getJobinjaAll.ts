@@ -3,6 +3,7 @@ import * as cheerio from "cheerio";
 import { searchUrl } from "@/lib/searchUrl";
 import Chromium from "@sparticuz/chromium-min";
 import { remoteExecutablePath } from "@/lib/globalVars";
+import puppeteer from "puppeteer";
 
 function cleanJobType(jobTypeText: string): string | null {
   // حذف خطوط جدید، فضاهای اضافی و متن حقوق
@@ -20,11 +21,17 @@ export default async function getJobinjaAll(
 ): Promise<JobItem[] | null> {
   const items: JobItem[] = [];
 
-  const browser = await puppeteerCore.launch({
-    headless: true,
-    args: Chromium.args,
-    executablePath: await Chromium.executablePath(remoteExecutablePath),
-  });
+  const browser =
+    process.env.NEXT_PUBLIC_VERCEL_ENVIRONMENT === "production"
+      ? await puppeteerCore.launch({
+          headless: true,
+          args: Chromium.args,
+          executablePath: await Chromium.executablePath(remoteExecutablePath),
+        })
+      : await puppeteer.launch({
+          headless: true,
+          args: ["--no-sandbox", "--disable-setuid-sandbox"],
+        });
   try {
     const page = await browser.newPage();
     await page.setUserAgent(
@@ -35,7 +42,7 @@ export default async function getJobinjaAll(
       timeout: 10000,
     });
     // Handle lazyLoad(if exist)
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    //await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
     const html = await page.content();
     const $ = cheerio.load(html);
 
