@@ -1,4 +1,4 @@
-function getPunishaOne(url: string) {
+export default async function getPunishaOne(url: string): Promise<JobItem> {
   return {
     type: "",
     url: url,
@@ -14,5 +14,3 @@ function getPunishaOne(url: string) {
     jobType: null,
   };
 }
-
-export default getPunishaOne;

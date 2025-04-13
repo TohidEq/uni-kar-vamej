@@ -1,4 +1,4 @@
-function getKarlancerOne(url: string) {
+export default async function getKarlancerOne(url: string): Promise<JobItem> {
   return {
     type: "",
     url: url,
@@ -14,5 +14,3 @@ function getKarlancerOne(url: string) {
     jobType: null,
   };
 }
-
-export default getKarlancerOne;

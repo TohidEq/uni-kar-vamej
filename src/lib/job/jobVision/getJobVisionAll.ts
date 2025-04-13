@@ -1,7 +1,83 @@
 import * as cheerio from "cheerio";
 import { searchUrl } from "@/lib/searchUrl";
-import { setTimeout } from "timers/promises";
-import { getBrowser } from "@/lib/globalVars";
+
+import { Page as Page_core } from "puppeteer-core";
+
+export default async function getJobvisionAll(
+  keyword: string,
+  page: Page_core
+): Promise<JobItem[] | null> {
+  const items: JobItem[] = [];
+
+  try {
+    await page.goto(searchUrl(keyword, "jobvision"), {
+      waitUntil: "domcontentloaded",
+      timeout: 0,
+    });
+
+    await page.waitForSelector("job-card span.d-flex.align-items-center", {
+      visible: true,
+    });
+
+    const html = await page.content();
+    const $ = cheerio.load(html);
+
+    $("job-card").each((i, element) => {
+      const salaryText =
+        $(element).find(".font-size-12px").first().text().trim() || "0";
+
+      const { starts: salaryStart, ends: salaryEnd } =
+        parseSalaryRange(salaryText);
+      const salary = salaryStart;
+
+      // Extract job type from tags like "امکان دورکاری" or "امکان جذب کارآموز"
+      const jobTypeRaw = $(element)
+        .find(".filter-label .text-secondary")
+        .text()
+        .trim();
+
+      const item: JobItem = {
+        type: "jobvision",
+        url: `https://jobvision.ir${$(element).find("a").attr("href") || ""}`,
+        title: $(element).find(".job-card-title").text().trim() || "",
+        caption: null, // No description in listing
+        salary,
+        salaryStart,
+        salaryEnd,
+        image: $(element).find("img").attr("src") || null,
+        time:
+          $(element)
+            .find("span.d-flex.align-items-center")
+            .first()
+            .text()
+            .trim() || null,
+        owner:
+          $(element).find("a.text-black.line-height-24").text().trim() ||
+          "ناشناخته",
+        location:
+          $(element)
+            .find(".text-secondary.pointer-events-none a")
+            .first()
+            .text()
+            .trim() || null,
+        jobType: cleanJobType(jobTypeRaw),
+      };
+
+      // Ensure required fields are present
+      if (item.url && item.title !== "") {
+        items.push(item);
+      }
+    });
+
+    if (items.length === 0) {
+      console.log("No items found. HTML snippet:", html.slice(0, 500));
+    }
+  } catch (error) {
+    console.error("Error scraping Jobvision:");
+    console.error(error);
+  }
+  return items.length > 0 ? items : null;
+}
 
 function parseSalaryRange(salaryText: string): {
   starts: number;
@@ -48,87 +124,4 @@ function cleanJobType(jobTypeText: string): string | null {
     .replace(/\(.*?\)/g, "")
     .trim();
   return cleaned || null;
-}
-
-export default async function getJobvisionAll(
-  keyword: string
-): Promise<JobItem[] | null> {
-  const items: JobItem[] = [];
-  
-  const browser = await getBrowser();
-
-  try {
-    const page = await browser.newPage();
-    await page.setUserAgent(
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-    );
-    await page.goto(searchUrl(keyword, "jobvision"), {
-      waitUntil: "networkidle2",
-      timeout: 100000,
-    });
-
-    //await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-    await setTimeout(2000);
-
-    const html = await page.content();
-    const $ = cheerio.load(html);
-
-    $("job-card").each((i, element) => {
-      const salaryText =
-        $(element).find(".font-size-12px").first().text().trim() || "0";
-
-      const { starts: salaryStart, ends: salaryEnd } =
-        parseSalaryRange(salaryText);
-      const salary = salaryStart;
-
-      // Extract job type from tags like "امکان دورکاری" or "امکان جذب کارآموز"
-      const jobTypeRaw = $(element)
-        .find(".filter-label .text-secondary")
-        .text()
-        .trim();
-
-      const item: JobItem = {
-        type: "jobvision",
-        url: `https://jobvision.ir${$(element).find("a").attr("href") || ""}`,
-        title: $(element).find(".job-card-title").text().trim() || "",
-        caption: null, // No description in listing
-        salary,
-        salaryStart,
-        salaryEnd,
-        image: $(element).find("img").attr("src") || null,
-        time:
-          $(element)
-            .find("span.d-flex.align-items-center")
-            .first()
-            .text()
-            .trim() || null,
-        owner:
-          $(element).find("a.text-black.line-height-24").text().trim() ||
-          "ناشناخته",
-        location:
-          $(element)
-            .find(".text-secondary.pointer-events-none a")
-            .first()
-            .text()
-            .trim() || null,
-        jobType: cleanJobType(jobTypeRaw),
-      };
-
-      if (item.url && item.title !== "") {
-        items.push(item);
-      }
-    });
-
-    if (items.length === 0) {
-      console.log("No items found. HTML snippet:", html.slice(0, 500));
-    }
-  } catch (error) {
-    console.error("Error scraping Jobvision:");
-    console.error(error);
-    return [];
-  } finally {
-    await browser.close();
-  }
-  if (items.length === 0) return null;
-  return items;
 }

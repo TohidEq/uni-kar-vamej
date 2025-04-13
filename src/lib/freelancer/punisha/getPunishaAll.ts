@@ -1,19 +1,17 @@
 import * as cheerio from "cheerio";
 import { searchUrl } from "@/lib/searchUrl";
 import { parseSalary } from "@/lib/parseSalary";
-import { getBrowser } from "@/lib/globalVars";
+import { Page as Page_core } from "puppeteer-core";
 
-async function getPunishaAll(
-  keyword: string
+export default async function getPunishaAll(
+  keyword: string,
+  page: Page_core | Page_core
 ): Promise<FreelancerItem[] | null> {
   const items: FreelancerItem[] = [];
 
-  const browser = await getBrowser();
-
   try {
-    const page = await browser.newPage();
     await page.goto(searchUrl(keyword, "punisha"), {
-      waitUntil: "load",
+      waitUntil: "domcontentloaded",
       timeout: 0,
     });
 
@@ -60,12 +58,7 @@ async function getPunishaAll(
   } catch (error) {
     console.error("Error scraping Ponisha:");
     console.error(error);
-  } finally {
-    await browser.close();
   }
-  if (items.length === 0) return null;
 
-  return items;
+  return items.length > 0 ? items : null;
 }
-
-export default getPunishaAll;

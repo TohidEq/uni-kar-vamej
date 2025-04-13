@@ -20,9 +20,7 @@ export function searchUrl(keyword: string, siteName: string): string {
       )}&filters%5Blocations%5D%5B%5D=&filters%5Bjob_categories%5D%5B%5D=&b=`;
     }
     case ALL_SITES["job"][1]: {
-      return `https://jobvision.ir/jobs/keyword/${encodeURIComponent(
-        keyword
-      )}?page=1&sort=1`;
+      return `https://jobvision.ir/jobs/keyword/${encodeURIComponent(keyword)}`;
     }
   }
 

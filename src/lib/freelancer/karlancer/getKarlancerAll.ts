@@ -1,21 +1,20 @@
 import * as cheerio from "cheerio";
 import { searchUrl } from "@/lib/searchUrl";
 import { parseSalary } from "@/lib/parseSalary";
-import { getBrowser } from "@/lib/globalVars";
+import { Page as Page_core } from "puppeteer-core";
 
-async function getKarlancerAll(
-  keyword: string
+export default async function getKarlancerAll(
+  keyword: string,
+  page: Page_core | Page_core
 ): Promise<FreelancerItem[] | null> {
   // Array to store freelancer items
-  const freelancerItems: FreelancerItem[] = [];
-  
-  const browser = await getBrowser();
+  const items: FreelancerItem[] = [];
+
+  // const browser = await getBrowser();
 
   try {
-    // Launch headless browser
-    const page = await browser.newPage();
     await page.goto(searchUrl(keyword, "karlancer"), {
-      waitUntil: "load",
+      waitUntil: "domcontentloaded",
       timeout: 0,
     });
 
@@ -52,23 +51,17 @@ async function getKarlancerAll(
             .trim() || "ناشناخته",
       };
 
-      // Only add if required fields (url, title, salary, owner) are present
-      if (item.title) {
-        freelancerItems.push(item);
+      // Ensure required fields are present
+      if (item.title && item.url) {
+        items.push(item);
       }
     });
 
     // Close the browser
-    await browser.close();
   } catch (error) {
     console.error("Error scraping Karlancer:");
     console.error(error);
-  } finally {
-    await browser.close();
   }
 
-  if (freelancerItems.length === 0) return null;
-  return freelancerItems;
+  return items.length > 0 ? items : null;
 }
-
-export default getKarlancerAll;

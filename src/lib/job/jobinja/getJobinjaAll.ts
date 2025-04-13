@@ -1,36 +1,22 @@
 import * as cheerio from "cheerio";
 import { searchUrl } from "@/lib/searchUrl";
-import { getBrowser } from "@/lib/globalVars";
-
-function cleanJobType(jobTypeText: string): string | null {
-  // حذف خطوط جدید، فضاهای اضافی و متن حقوق
-  const cleaned = jobTypeText
-    .replace(/\n/g, " ") // جایگزینی خطوط جدید با فاصله
-    .replace(/\s+/g, " ") // تبدیل چندین فاصله به یک فاصله
-    .replace(/\(.*?\)/g, "") // حذف هر چیزی داخل پرانتز (مثل حقوق)
-    .trim(); // حذف فضاهای ابتدا و انتها
-
-  return cleaned || null;
-}
+import { Page as Page_core } from "puppeteer-core";
 
 export default async function getJobinjaAll(
-  keyword: string = "js"
+  keyword: string,
+  page: Page_core | Page_core
 ): Promise<JobItem[] | null> {
   const items: JobItem[] = [];
 
-  const browser = await getBrowser();
-
   try {
-    const page = await browser.newPage();
-    await page.setUserAgent(
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-    );
     await page.goto(searchUrl(keyword, "jobinja"), {
-      waitUntil: "networkidle2",
-      timeout: 10000,
+      waitUntil: "domcontentloaded",
+      timeout: 0,
     });
-    // Handle lazyLoad(if exist)
-    //await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+
+    await page.waitForSelector(".c-jobListView__item", {
+      visible: true,
+    });
     const html = await page.content();
     const $ = cheerio.load(html);
 
@@ -83,6 +69,7 @@ export default async function getJobinjaAll(
         ),
       };
 
+      // Ensure required fields are present
       if (item.url && item.title) {
         items.push(item);
       }
@@ -90,11 +77,18 @@ export default async function getJobinjaAll(
   } catch (error) {
     console.error("Error scraping Jobinja:");
     console.error(error);
-    return [];
-  } finally {
-    await browser.close();
   }
 
-  if (items.length === 0) return null;
-  return items;
+  return items.length > 0 ? items : null;
+}
+
+function cleanJobType(jobTypeText: string): string | null {
+  // حذف خطوط جدید، فضاهای اضافی و متن حقوق
+  const cleaned = jobTypeText
+    .replace(/\n/g, " ") // جایگزینی خطوط جدید با فاصله
+    .replace(/\s+/g, " ") // تبدیل چندین فاصله به یک فاصله
+    .replace(/\(.*?\)/g, "") // حذف هر چیزی داخل پرانتز (مثل حقوق)
+    .trim(); // حذف فضاهای ابتدا و انتها
+
+  return cleaned || null;
 }

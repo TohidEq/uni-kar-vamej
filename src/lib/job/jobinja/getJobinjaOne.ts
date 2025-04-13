@@ -1,4 +1,4 @@
-function getJobinjaOne(url: string) {
+export default async function getJobinjaOne(url: string): Promise<JobItem> {
   return {
     type: "",
     url: url,
@@ -14,5 +14,3 @@ function getJobinjaOne(url: string) {
     jobType: null,
   };
 }
-
-export default getJobinjaOne;
