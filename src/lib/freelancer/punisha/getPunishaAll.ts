@@ -1,27 +1,15 @@
-import puppeteerCore from "puppeteer-core";
 import * as cheerio from "cheerio";
 import { searchUrl } from "@/lib/searchUrl";
 import { parseSalary } from "@/lib/parseSalary";
-import Chromium from "@sparticuz/chromium-min";
-import { remoteExecutablePath } from "@/lib/globalVars";
-import puppeteer from "puppeteer";
+import { getBrowser } from "@/lib/globalVars";
 
 async function getPunishaAll(
   keyword: string
 ): Promise<FreelancerItem[] | null> {
   const items: FreelancerItem[] = [];
-  
-  const browser =
-    process.env.NEXT_PUBLIC_VERCEL_ENVIRONMENT === "production"
-      ? await puppeteerCore.launch({
-          headless: true,
-          args: Chromium.args,
-          executablePath: await Chromium.executablePath(remoteExecutablePath),
-        })
-      : await puppeteer.launch({
-          headless: true,
-          args: ["--no-sandbox", "--disable-setuid-sandbox"],
-        });
+
+  const browser = await getBrowser();
+
   try {
     const page = await browser.newPage();
     await page.goto(searchUrl(keyword, "punisha"), {
