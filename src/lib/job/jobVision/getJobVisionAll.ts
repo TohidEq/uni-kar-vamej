@@ -17,6 +17,7 @@ export default async function getJobvisionAll(
 
     await page.waitForSelector("job-card span.d-flex.align-items-center", {
       visible: true,
+      timeout: 10000,
     });
 
     const html = await page.content();

@@ -1,63 +1,69 @@
 import getKarlancerOne from "./freelancer/karlancer/getKarlancerOne";
-import getPunishaOne from "./freelancer/punisha/getPunishaOne";
-import { ALL_SITES } from "./globalVars";
-import getJobinjaOne from "./job/jobinja/getJobinjaOne";
-import getJobVisionOne from "./job/jobVision/getJobVisionOne";
+// import getPunishaOne from "./freelancer/punisha/getPunishaOne";
+// import getJobinjaOne from "./job/jobinja/getJobinjaOne";
+// import getJobVisionOne from "./job/jobVision/getJobVisionOne";
+import { ALL_SITES, getBrowser } from "./globalVars";
 
-export default async function getOneSearchResult(Props: {
+interface SearchOneProps {
   url: string;
-  site: string;
-}): Promise<JobItem> {
-  const { site, url } = Props;
-  const result: { resultOne: JobItem } = {
-    resultOne: {
-      type: "",
-      url: "",
-      title: "",
-      caption: null,
-      salary: 0,
-      salaryStart: null,
-      salaryEnd: null,
-      image: null,
-      time: null,
-      owner: "",
-      location: null,
-      jobType: null,
-    },
-  };
+  siteType: string;
+}
+
+export default async function getOneSearchResult(
+  props: SearchOneProps
+): Promise<JobItem | null> {
+  const { url, siteType } = props;
+  let result: JobItem | null = null;
 
   console.log(
     process.env.NEXT_PUBLIC_VERCEL_ENVIRONMENT === "production"
       ? "Production log:"
       : "Development log:"
   );
+  console.log("url:", url, "siteType:", siteType);
 
-  switch (site) {
-    // ==== FREELANCERS ====
-    case ALL_SITES["freelancer"][0]: {
-      const karlancerResult = await getKarlancerOne(Props.url);
-      result.resultOne = { ...karlancerResult };
-      break;
+  const browser = await getBrowser();
+  const page = await browser.newPage();
+  await page.setUserAgent(
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+  );
+
+  try {
+    console.log("start ->", siteType);
+    switch (siteType) {
+      // ==== FREELANCERS ====
+      case ALL_SITES.freelancer[0]: {
+        result = await getKarlancerOne(url, page);
+        break;
+      }
+      case ALL_SITES.freelancer[1]: {
+        // result = await getPunishaOne(url, page);
+        break;
+      }
+      // ======= JOBS ========
+      case ALL_SITES.job[0]: {
+        // result = await getJobinjaOne(url, page);
+        break;
+      }
+      case ALL_SITES.job[1]: {
+        // result = await getJobVisionOne(url, page);
+        break;
+      }
+      default:
+        console.warn(`No handler for siteType: ${siteType}`);
     }
-    case ALL_SITES["freelancer"][1]: {
-      const ponishaResult = await getPunishaOne(Props.url);
-      result.resultOne = { ...ponishaResult };
-      break;
-    }
-    // ======= JOBS ========
-    case ALL_SITES["job"][0]: {
-      const jobinjaResult = await getJobinjaOne(Props.url);
-      result.resultOne = { ...jobinjaResult };
-      break;
-    }
-    case ALL_SITES["job"][1]: {
-      const jobVisionResult = await getJobVisionOne(Props.url);
-      result.resultOne = { ...jobVisionResult };
-      break;
-    }
-    default:
-      console.warn(`No handler for site: ${site} and url: ${url}`);
+    console.log("end <- ", siteType);
+    console.log(
+      `siteType: ${siteType} \t Done \t ${
+        result ? "1 result found" : "No result found"
+      }`
+    );
+  } catch (error) {
+    console.error(`Error scraping ${siteType} for URL ${url}:`, error);
+  } finally {
+    await page.close();
+    await browser.close();
   }
 
-  return result.resultOne;
+  return result;
 }

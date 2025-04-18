@@ -1,6 +1,7 @@
 import * as cheerio from "cheerio";
 import { searchUrl } from "@/lib/searchUrl";
 import { Page as Page_core } from "puppeteer-core";
+import { setTimeout } from "timers/promises";
 
 export default async function getJobinjaAll(
   keyword: string,
@@ -14,9 +15,8 @@ export default async function getJobinjaAll(
       timeout: 0,
     });
 
-    await page.waitForSelector(".c-jobListView__item", {
-      visible: true,
-    });
+    await setTimeout(2000);
+
     const html = await page.content();
     const $ = cheerio.load(html);
 
