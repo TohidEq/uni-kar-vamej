@@ -1,11 +1,11 @@
 import * as cheerio from "cheerio";
 import { searchUrl } from "@/lib/searchUrl";
-import { Page as Page_core } from "puppeteer-core";
+import { Page } from "puppeteer";
 import { setTimeout } from "timers/promises";
 
 export default async function getJobinjaAll(
   keyword: string,
-  page: Page_core | Page_core
+  page: Page
 ): Promise<JobItem[] | null> {
   const items: JobItem[] = [];
 

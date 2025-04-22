@@ -1,11 +1,11 @@
 import * as cheerio from "cheerio";
 import { searchUrl } from "@/lib/searchUrl";
 
-import { Page as Page_core } from "puppeteer-core";
+import { Page } from "puppeteer";
 
 export default async function getJobvisionAll(
   keyword: string,
-  page: Page_core
+  page: Page
 ): Promise<JobItem[] | null> {
   const items: JobItem[] = [];
 

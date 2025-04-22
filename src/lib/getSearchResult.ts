@@ -69,7 +69,7 @@ export default async function getSearchResult(
     console.log("end <- ", site);
     console.log(`site: ${site} \t Done \t ${resultCounter} results founded`);
   }
-  await page.close();
-  await browser.close();
+  page.close();
+  browser.close();
   return results;
 }

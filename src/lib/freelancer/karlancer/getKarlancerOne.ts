@@ -1,10 +1,10 @@
 import * as cheerio from "cheerio";
-import { Page as Page_core } from "puppeteer-core";
+import { Page } from "puppeteer";
 import { setTimeout } from "timers/promises";
 
 export default async function getKarlancerOne(
   url: string,
-  page: Page_core
+  page: Page
 ): Promise<JobItem | null> {
   try {
     // Navigate to the provided URL

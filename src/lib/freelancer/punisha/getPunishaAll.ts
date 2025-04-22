@@ -1,11 +1,11 @@
 import * as cheerio from "cheerio";
 import { searchUrl } from "@/lib/searchUrl";
 import { parseSalary } from "@/lib/parseSalary";
-import { Page as Page_core } from "puppeteer-core";
+import { Page } from "puppeteer";
 
 export default async function getPunishaAll(
   keyword: string,
-  page: Page_core | Page_core
+  page: Page
 ): Promise<FreelancerItem[] | null> {
   const items: FreelancerItem[] = [];
 
