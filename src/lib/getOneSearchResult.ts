@@ -61,8 +61,8 @@ export default async function getOneSearchResult(
   } catch (error) {
     console.error(`Error scraping ${siteType} for URL ${url}:`, error);
   } finally {
-    await page.close();
-    await browser.close();
+    // page.close();
+    browser.close();
   }
 
   return result;

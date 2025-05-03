@@ -56,8 +56,6 @@ export default async function getKarlancerAll(
         items.push(item);
       }
     });
-
-    // Close the browser
   } catch (error) {
     console.error("Error scraping Karlancer:");
     console.error(error);

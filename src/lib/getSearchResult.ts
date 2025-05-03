@@ -12,11 +12,6 @@ export default async function getSearchResult(
     freelancers: [],
   };
 
-  console.log(
-    process.env.NEXT_PUBLIC_VERCEL_ENVIRONMENT === "production"
-      ? "Production log:"
-      : "Development log:"
-  );
   console.log("keyword:", Props.keyword);
   const browser = await getBrowser();
   const page = await browser.newPage();
@@ -69,7 +64,7 @@ export default async function getSearchResult(
     console.log("end <- ", site);
     console.log(`site: ${site} \t Done \t ${resultCounter} results founded`);
   }
-  page.close();
+  // page.close();
   browser.close();
   return results;
 }
