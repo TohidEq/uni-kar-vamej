@@ -1,6 +1,6 @@
 // import { Page } from "puppeteer";
 export default async function getJobinjaOne(
-  url: string,
+  url: string
   // page: Page
 ): Promise<JobItem> {
   // Needs a Punisha Account

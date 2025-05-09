@@ -31,8 +31,10 @@ export default async function getJobVisionOne(
       : null;
 
     // Extract time posted from time element datetime attribute or text
-    const timeElement = $("time[datetime]").first();
-    const time = timeElement.length > 0 ? timeElement.text().trim() : null;
+    const timeElement = $(".font-size-5.font-weight.mr-2.text-muted").first();
+    const time = timeElement
+      ? timeElement.text().trim().replace(")", "").replace("(", "")
+      : null;
 
     // Extract location
     const location = $(".text-muted.font-size-6.yn_category.ng-star-inserted")

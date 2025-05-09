@@ -15,11 +15,6 @@ export default async function getOneSearchResult(
   const { url, siteType } = props;
   let result: JobItem | null = null;
 
-  console.log(
-    process.env.NEXT_PUBLIC_VERCEL_ENVIRONMENT === "production"
-      ? "Production log:"
-      : "Development log:"
-  );
   console.log("url:", url, "siteType:", siteType);
 
   const browser = await getBrowser();

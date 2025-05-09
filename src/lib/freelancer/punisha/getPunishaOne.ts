@@ -8,7 +8,7 @@ export default async function getPunishaOne(
 ): Promise<JobItem | null> {
   try {
     await page.goto(url, {
-      waitUntil: "networkidle2",
+      waitUntil: "domcontentloaded", // done
       timeout: 0,
     });
 
@@ -21,7 +21,10 @@ export default async function getPunishaOne(
       )
         .text()
         .trim() || "بدون عنوان";
-    const caption = $("div.MuiBox-root.css-11s70a").text().trim() || null;
+    const caption =
+      $(".MuiTypography-root.MuiTypography-subtitle1.css-vuyg52")
+        .text()
+        .trim() || null;
 
     const salaryText = $(
       "div.MuiTypography-root.MuiTypography-subtitle1.css-ri6noj"
