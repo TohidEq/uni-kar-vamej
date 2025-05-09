@@ -1,6 +1,7 @@
 import * as cheerio from "cheerio";
 import { Page } from "puppeteer";
-import { setTimeout } from "timers/promises";
+// import { setTimeout } from "timers/promises";
+import { persianToEnglishNumber } from "../../parseSalary";
 
 export default async function getKarlancerOne(
   url: string,
@@ -9,12 +10,12 @@ export default async function getKarlancerOne(
   try {
     // Navigate to the provided URL
     await page.goto(url, {
-      waitUntil: "domcontentloaded",
+      waitUntil: "networkidle2",
       timeout: 0,
     });
 
     // Wait for content to load
-    await setTimeout(2000);
+    // await setTimeout(2000);
 
     // Get page content
     const html = await page.content();
@@ -25,18 +26,30 @@ export default async function getKarlancerOne(
     const caption =
       $("div.text-right.white-space-pre-line.lh-2-31.fs-14").text().trim() ||
       null;
-    const salaryStartText = $('div.d-flex:contains("از")')
-      .find("div")
+    const salaryStartText = $(
+      ".fs-16.ml-2.lh-30.d-block.d-sm-flex.b-900.mr-0.mr-sm-2.ml-1"
+    )
+      .find(".d-flex")
+      .first()
+      .text()
+      .trim();
+    console.log("Found salaryStartText:", salaryStartText);
+    const salaryEndText = $(
+      ".fs-16.ml-2.lh-30.d-block.d-sm-flex.b-900.mr-0.mr-sm-2.ml-1"
+    )
+      .find(".d-flex")
       .last()
       .text()
-      .trim()
-      .replace(/[^\d]/g, "");
-    const salaryEndText = $('div.d-flex:contains("تا")')
-      .find("div")
-      .last()
-      .text()
-      .trim()
-      .replace(/[^\d]/g, "");
+      .trim();
+    console.log("Found salaryEndText:", salaryEndText);
+    const salaryStartNum = salaryStartText
+      ? persianToEnglishNumber(salaryStartText)
+      : null;
+    console.log("Parsed salaryStartNum:", salaryStartNum);
+    const salaryEndNum = salaryEndText
+      ? persianToEnglishNumber(salaryEndText)
+      : null;
+    console.log("Parsed salaryEndNum:", salaryEndNum);
     const time =
       $("span.fs-13.br-90.px-3.py-2.bg-39-color").text().trim() || null;
     const location =
@@ -53,9 +66,14 @@ export default async function getKarlancerOne(
       url: url,
       title,
       caption,
-      salary: -1, // Not explicitly provided in HTML
-      salaryStart: salaryStartText ? parseInt(salaryStartText) : null,
-      salaryEnd: salaryEndText ? parseInt(salaryEndText) : null,
+      salary:
+        salaryEndNum !== null
+          ? salaryEndNum
+          : salaryStartNum !== null
+          ? salaryStartNum
+          : -1,
+      salaryStart: salaryStartNum,
+      salaryEnd: salaryEndNum,
       image: null, // No image URL found in provided HTML
       time,
       owner,
