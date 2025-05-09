@@ -33,7 +33,7 @@ export default async function getKarlancerOne(
       .first()
       .text()
       .trim();
-    console.log("Found salaryStartText:", salaryStartText);
+    // console.log("Found salaryStartText:", salaryStartText);
     const salaryEndText = $(
       ".fs-16.ml-2.lh-30.d-block.d-sm-flex.b-900.mr-0.mr-sm-2.ml-1"
     )
@@ -41,15 +41,15 @@ export default async function getKarlancerOne(
       .last()
       .text()
       .trim();
-    console.log("Found salaryEndText:", salaryEndText);
+    // console.log("Found salaryEndText:", salaryEndText);
     const salaryStartNum = salaryStartText
       ? persianToEnglishNumber(salaryStartText)
       : null;
-    console.log("Parsed salaryStartNum:", salaryStartNum);
+    // console.log("Parsed salaryStartNum:", salaryStartNum);
     const salaryEndNum = salaryEndText
       ? persianToEnglishNumber(salaryEndText)
       : null;
-    console.log("Parsed salaryEndNum:", salaryEndNum);
+    // console.log("Parsed salaryEndNum:", salaryEndNum);
     const time =
       $("span.fs-13.br-90.px-3.py-2.bg-39-color").text().trim() || null;
     const location =
