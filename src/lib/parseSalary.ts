@@ -62,3 +62,19 @@ export function parseSalaryRange(salaryText: string): {
     salary: singleValue,
   };
 }
+
+export function convertSalaryRangeToNumbers(salaryRangeText: string): number[] {
+  // Remove spaces and "تومان"
+  const cleanedText = salaryRangeText.replace(/\s*تومان\s*/g, "").trim();
+
+  // Match the range numbers
+  const rangeMatch = cleanedText.match(/(\d+)\s*-\s*(\d+)/);
+  if (!rangeMatch) {
+    return [];
+  }
+
+  const start = parseInt(rangeMatch[1], 10) * 1000000;
+  const end = parseInt(rangeMatch[2], 10) * 1000000;
+
+  return [start, end];
+}
