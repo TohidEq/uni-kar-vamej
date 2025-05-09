@@ -1,6 +1,6 @@
 import getKarlancerOne from "./freelancer/karlancer/getKarlancerOne";
 import getPunishaOne from "./freelancer/punisha/getPunishaOne";
-// import getJobinjaOne from "./job/jobinja/getJobinjaOne";
+import getJobinjaOne from "./job/jobinja/getJobinjaOne";
 // import getJobVisionOne from "./job/jobVision/getJobVisionOne";
 import { ALL_SITES, getBrowser } from "./globalVars";
 
@@ -42,7 +42,7 @@ export default async function getOneSearchResult(
       }
       // ======= JOBS ========
       case ALL_SITES.job[0]: {
-        // result = await getJobinjaOne(url, page);
+        result = await getJobinjaOne(url /*, page */);
         break;
       }
       case ALL_SITES.job[1]: {
