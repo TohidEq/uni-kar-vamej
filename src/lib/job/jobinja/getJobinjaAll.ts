@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio";
 import { searchUrl } from "@/lib/searchUrl";
 import { Page } from "puppeteer";
-import { setTimeout } from "timers/promises";
+// import { setTimeout } from "timers/promises";
 
 export default async function getJobinjaAll(
   keyword: string,
@@ -11,11 +11,11 @@ export default async function getJobinjaAll(
 
   try {
     await page.goto(searchUrl(keyword, "jobinja"), {
-      waitUntil: "domcontentloaded",
+      waitUntil: "networkidle2", //DONE
       timeout: 0,
     });
 
-    await setTimeout(2000);
+    // await setTimeout(2000);
 
     const html = await page.content();
     const $ = cheerio.load(html);

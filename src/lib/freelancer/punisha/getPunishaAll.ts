@@ -11,7 +11,7 @@ export default async function getPunishaAll(
 
   try {
     await page.goto(searchUrl(keyword, "punisha"), {
-      waitUntil: "domcontentloaded",
+      waitUntil: "domcontentloaded", //DONE
       timeout: 0,
     });
 

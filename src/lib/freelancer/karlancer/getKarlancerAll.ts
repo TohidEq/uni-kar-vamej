@@ -14,7 +14,7 @@ export default async function getKarlancerAll(
 
   try {
     await page.goto(searchUrl(keyword, "karlancer"), {
-      waitUntil: "networkidle2",
+      waitUntil: "networkidle2", //DONE
       timeout: 0,
     });
 

@@ -8,7 +8,7 @@ export default async function getPunishaOne(
 ): Promise<JobItem | null> {
   try {
     await page.goto(url, {
-      waitUntil: "domcontentloaded", // done
+      waitUntil: "domcontentloaded", // DONE
       timeout: 0,
     });
 
