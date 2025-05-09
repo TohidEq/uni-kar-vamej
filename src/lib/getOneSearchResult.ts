@@ -1,7 +1,7 @@
 import getKarlancerOne from "./freelancer/karlancer/getKarlancerOne";
 import getPunishaOne from "./freelancer/punisha/getPunishaOne";
 import getJobinjaOne from "./job/jobinja/getJobinjaOne";
-// import getJobVisionOne from "./job/jobVision/getJobVisionOne";
+import getJobVisionOne from "./job/jobVision/getJobVisionOne";
 import { ALL_SITES, getBrowser } from "./globalVars";
 
 interface SearchOneProps {
@@ -46,7 +46,7 @@ export default async function getOneSearchResult(
         break;
       }
       case ALL_SITES.job[1]: {
-        // result = await getJobVisionOne(url, page);
+        result = await getJobVisionOne(url, page);
         break;
       }
       default:
