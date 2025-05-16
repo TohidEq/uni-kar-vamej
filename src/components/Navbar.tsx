@@ -3,6 +3,7 @@ import React from "react";
 import ChangeTheme from "./ChangeTheme";
 import { Heart, Loader } from "lucide-react";
 import SiteIcon from "./SiteIcon";
+import Link from "next/link";
 
 type Props = {
   enableFavoriteLink?: boolean;
@@ -14,16 +15,16 @@ function Navbar({ enableFavoriteLink = false }: Props) {
     <nav className="navbar container mx-auto my-container">
       <div className="flex w-full items-center justify-between md:p-4">
         {/* راست: لوگو */}
-        <div className="flex items-center">
+        <div className="flex items-center ">
           <SiteIcon />
         </div>
 
         {/* چپ: علاقه‌مندی‌ها و دکمه تم */}
         <div className="flex items-center gap-4">
           {enableFavoriteLink && (
-            <a
+            <Link
               href="/favorites"
-              className="flex items-center gap-1 text-sm group"
+              className="items-center gap-1 text-sm group custom-link-underline flex"
             >
               <Heart
                 size={20}
@@ -32,7 +33,7 @@ function Navbar({ enableFavoriteLink = false }: Props) {
               <span className="navbar__favorites__text hidden sm:inline-block transition-opacity duration-500 group-hover:opacity-80">
                 علاقه‌مندی‌ها
               </span>
-            </a>
+            </Link>
           )}
           {changeThemeBtn ? (
             <ChangeTheme />

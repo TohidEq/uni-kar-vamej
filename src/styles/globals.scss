@@ -3,6 +3,8 @@
 @import "font.scss";
 @import "base.scss";
 
+@import "footer.scss";
+
 @plugin "daisyui" {
   themes: light --default, dark --prefersdark;
 }

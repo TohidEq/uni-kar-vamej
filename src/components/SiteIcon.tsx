@@ -23,7 +23,7 @@ function SiteIcon() {
   return (
     <Link
       href="/"
-      className="flex items-center gap-2 px-3 py-2 group select-none"
+      className="flex items-center gap-2 mx-3 py-2 group select-none custom-link-underline"
     >
       {siteSVG}
       <span className="text-lg font-semibold transition-transform duration-300 hover:scale-105 ">

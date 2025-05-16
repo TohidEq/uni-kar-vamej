@@ -1,0 +1,5 @@
+.footer-link {
+  @apply flex items-center gap-1 relative transition-all duration-300;
+  text-decoration: none;
+  @extend .custom-link-underline;
+}
