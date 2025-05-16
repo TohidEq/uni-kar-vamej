@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Moon, Sun } from "lucide-react";
+import { Loader, Moon, Sun } from "lucide-react";
 
 export default function ChangeTheme() {
   const [isDark, setIsDark] = useState(false);
@@ -31,7 +31,8 @@ export default function ChangeTheme() {
     setIsDark(!isDark);
   };
 
-  if (!mounted) return null;
+  if (!mounted)
+    return <Loader size={20} className="animate-spin text-gray-500" />;
 
   return (
     <button

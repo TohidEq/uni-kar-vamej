@@ -1,7 +1,7 @@
 "use client";
-import React from "react";
+
 import ChangeTheme from "./ChangeTheme";
-import { Heart, Loader } from "lucide-react";
+import { Heart } from "lucide-react";
 import SiteIcon from "./SiteIcon";
 import Link from "next/link";
 
@@ -9,8 +9,9 @@ type Props = {
   enableFavoriteLink?: boolean;
 };
 
+import React, { memo } from "react";
+
 function Navbar({ enableFavoriteLink = false }: Props) {
-  const changeThemeBtn: boolean = ChangeTheme() !== null;
   return (
     <nav className="navbar container mx-auto my-container">
       <div className="flex w-full items-center justify-between md:p-4">
@@ -35,15 +36,11 @@ function Navbar({ enableFavoriteLink = false }: Props) {
               </span>
             </Link>
           )}
-          {changeThemeBtn ? (
-            <ChangeTheme />
-          ) : (
-            <Loader size={20} className="animate-spin text-gray-500" />
-          )}
+          <ChangeTheme />
         </div>
       </div>
     </nav>
   );
 }
 
-export default Navbar;
+export default memo(Navbar);
