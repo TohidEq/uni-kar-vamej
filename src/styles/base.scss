@@ -1,0 +1,49 @@
+h1 {
+  font-family: "Vazirmatn", sans-serif;
+  font-weight: 900;
+}
+
+h2 {
+  font-family: "Vazirmatn", sans-serif;
+  font-weight: 700;
+}
+
+h3 {
+  font-family: "Vazirmatn", sans-serif;
+  font-weight: 600;
+}
+
+h4 {
+  font-family: "Vazirmatn", sans-serif;
+  font-weight: 500;
+}
+
+h5,
+p,
+li,
+span,
+a {
+  font-family: "Vazirmatn", sans-serif;
+  font-weight: 400;
+}
+
+h6,
+small {
+  font-family: "Vazirmatn", sans-serif;
+  font-weight: 300;
+}
+
+.my-container {
+  @apply max-w-[1000px];
+}
+
+
+
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
