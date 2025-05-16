@@ -10,7 +10,7 @@
 .vazirmatn-200 {
   font-family: "Vazirmatn", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 200;
+  @apply font-extralight;
   font-style: normal;
 }
 

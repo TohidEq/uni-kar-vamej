@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Github, BookOpen, Info } from "lucide-react";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -9,31 +10,36 @@ export default function Footer() {
       <div className="container max-w-[1000px] mx-auto flex flex-col gap-4 px-4 md:flex-row md:items-center md:justify-between">
         {/* کپی‌رایت */}
         <p className="rtl text-center">
-          © {new Date().getFullYear()} تمامی حقوق برای{" "}
-          <span className="font-bold">کاروامج</span> محفوظ است.
+          © {2025} تمامی حقوق برای <span className="font-bold">کاروامج</span>{" "}
+          محفوظ است.
         </p>
 
         {/* لینک‌ها */}
         <div className="flex flex-wrap gap-6 rtl text-center justify-center">
-          <a
-            href="https://github.com/your-repo"
+          <Link
+            href="https://github.com/TohidEq/uni-kar-vamej"
             className="footer-link"
             target="_blank"
             rel="noopener noreferrer"
           >
             <Github size={18} className="footer-icon" />
             گیت‌هاب
-          </a>
+          </Link>
 
-          <a href="/docs" className="footer-link">
+          <Link
+            href="https://deepwiki.com/TohidEq/uni-kar-vamej"
+            className="footer-link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <BookOpen size={18} className="footer-icon" />
             مستندات
-          </a>
+          </Link>
 
-          <a href="/about" className="footer-link">
+          <Link href="/about" className="footer-link">
             <Info size={18} className="footer-icon" />
             درباره پروژه
-          </a>
+          </Link>
         </div>
       </div>
     </footer>

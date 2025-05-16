@@ -6,9 +6,11 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build-css": "npx @tailwindcss/cli -i ./src/styles/tailwind.scss -o ./src/styles/globals.scss --watch"
   },
   "dependencies": {
+    "@tailwindcss/cli": "^4.1.7",
     "cheerio": "^1.0.0",
     "daisyui": "^5.0.35",
     "lucide-react": "^0.511.0",
@@ -28,7 +30,7 @@
     "eslint-config-next": "15.2.4",
     "postcss": "^8.5.3",
     "sass": "^1.86.0",
-    "tailwindcss": "^4.1.6",
+    "tailwindcss": "^4.1.7",
     "typescript": "^5"
   }
 }
