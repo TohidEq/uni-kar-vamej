@@ -1,5 +1,12 @@
 .footer-link {
   @apply flex items-center gap-1 relative transition-all duration-300;
   text-decoration: none;
-  @extend .custom-link-underline;
+}
+
+.footer-icon {
+  transition: transform 0.3s ease;
+}
+
+.footer-link:hover .footer-icon {
+  transform: rotate(-12deg);
 }

@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "build-css": "npx @tailwindcss/cli -i ./src/styles/tailwind.scss -o ./src/styles/globals.scss --watch"
+    "build-css": "npx @tailwindcss/cli --postcss-scss -i ./src/styles/tailwind.scss -o ./src/styles/globals.scss --watch"
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.1.7",

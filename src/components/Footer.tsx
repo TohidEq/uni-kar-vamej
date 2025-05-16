@@ -18,7 +18,7 @@ export default function Footer() {
         <div className="flex flex-wrap gap-6 rtl text-center justify-center">
           <Link
             href="https://github.com/TohidEq/uni-kar-vamej"
-            className="footer-link"
+            className="footer-link custom-link-underline"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -28,7 +28,7 @@ export default function Footer() {
 
           <Link
             href="https://deepwiki.com/TohidEq/uni-kar-vamej"
-            className="footer-link"
+            className="footer-link custom-link-underline"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -36,7 +36,7 @@ export default function Footer() {
             مستندات
           </Link>
 
-          <Link href="/about" className="footer-link">
+          <Link href="/about" className="footer-link custom-link-underline">
             <Info size={18} className="footer-icon" />
             درباره پروژه
           </Link>

@@ -856,6 +856,12 @@
   transition-duration: 300ms;
   text-decoration: none;
 }
+.footer-icon {
+  transition: transform 0.3s ease;
+}
+.footer-link:hover .footer-icon {
+  transform: rotate(-12deg);
+}
 @layer base {
   :where(:root),:root:has(input.theme-controller[value=light]:checked),[data-theme=light] {
     color-scheme: light;
