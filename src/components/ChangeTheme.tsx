@@ -3,6 +3,25 @@
 import { useEffect, useState } from "react";
 import { Loader, Moon, Sun } from "lucide-react";
 
+const lightThemes = [
+  "light",
+  "retro",
+  "fantasy",
+  "emerald",
+  "silk",
+  "corporate",
+  "autumn",
+];
+const darkThemes = [
+  "dark",
+  "business",
+  "luxury",
+  "forest",
+  "abyss",
+  "dracula",
+  "halloween",
+];
+
 export default function ChangeTheme() {
   const [isDark, setIsDark] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -11,20 +30,18 @@ export default function ChangeTheme() {
     setMounted(true);
     const html = document.documentElement;
     const storedTheme = localStorage.getItem("theme");
+    const currentTheme = storedTheme || html.dataset.theme || "light";
 
-    if (
-      storedTheme === "dark" ||
-      (!storedTheme && html.dataset.theme === "dark")
-    ) {
-      setIsDark(true);
-    } else {
-      setIsDark(false);
-    }
+    setIsDark(darkThemes.includes(currentTheme));
   }, []);
 
   const toggleTheme = () => {
     const html = document.documentElement;
-    const newTheme = isDark ? "light" : "dark";
+
+    // انتخاب تم رندوم از دسته مقابل
+    const newTheme = isDark
+      ? lightThemes[Math.floor(Math.random() * lightThemes.length)]
+      : darkThemes[Math.floor(Math.random() * darkThemes.length)];
 
     html.dataset.theme = newTheme;
     localStorage.setItem("theme", newTheme);

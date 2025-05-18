@@ -2,6 +2,14 @@
   font-family: "Vazirmatn", sans-serif;
 }
 
+input,
+textarea,
+select,
+button {
+  &:focus {
+  }
+}
+
 .my-container {
   @apply max-w-[1000px];
 }
