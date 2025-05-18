@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "@/styles/globals.scss";
 import ThemeInitializer from "@/components/ThemeInitializer";
 import Footer from "@/components/Footer";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "کاروامج",
@@ -18,7 +19,9 @@ export default function RootLayout({
       <body className={`antialiased flex flex-col min-h-screen`}>
         <ThemeInitializer />
         {/* محتوا + رشددهنده برای گرفتن فضای خالی */}
-        <main className="flex-1">{children}</main>
+        <main className="flex-1">
+          <Suspense>{children}</Suspense>
+        </main>
 
         <Footer />
       </body>
