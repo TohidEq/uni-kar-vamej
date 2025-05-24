@@ -15,17 +15,22 @@ export default function Home() {
       setHasFavorites(true);
     }
   }, []);
-
+  // TODO: font fix for main title and Shoaar and other...
   return (
     <div className="main min-h-screen flex flex-col">
       <Navbar enableFavoriteLink={true} />
 
       {/* محتوای اصلی در یک‌سوم بالای صفحه */}
       <div
-        className="flex flex-col items-center justify-start flex-grow px-4 text-center pt-[8vh] md:pt-[10vh]"
+        className="flex flex-col items-center justify-start flex-grow px-4 text-center pt-[10vh] md:pt-[20vh]"
         dir="rtl"
       >
         <div className="w-full max-w-md">
+          {/* شعار سایت */}
+          <p className="text-sm md:text-base mb-2 font-medium">
+            با چند کلمه، فرصت‌هاتو پیدا کن!
+          </p>
+
           <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold mb-4">
             چه شغل یا پروژه‌ای تو ذهنته؟
           </h2>
@@ -33,10 +38,10 @@ export default function Home() {
           <SearchInput />
 
           {!hasFavorites && (
-            <div className="mt-4 text-sm flex items-center gap-1  justify-center">
+            <div className="mt-4 text-sm flex items-center gap-1 justify-center">
               <Link
                 href="/favorites"
-                className="flex items-center gap-1 border-b border-gray-400 pb-[1px] group"
+                className="flex items-center gap-1 border-b border-blue-600/40 pb-[1px] group custom-link-underline"
               >
                 <Heart
                   className="w-4 h-4 text-red-500 animate-pulse transition-all duration-300 group-hover:scale-110 group-hover:animate-[pulse_2s_infinite]"

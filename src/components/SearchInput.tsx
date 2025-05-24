@@ -10,7 +10,9 @@ export default function SearchInput() {
   const handleSearch = () => {
     const trimmed = query.trim();
     if (!trimmed) return;
-    router.push(`/search?q=${encodeURIComponent(trimmed)}`);
+    // جایگزین کردن فاصله با + برای URL
+    const formattedQuery = encodeURIComponent(trimmed.replace(/\s+/g, '+'));
+    router.push(`/search/${formattedQuery}`);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
