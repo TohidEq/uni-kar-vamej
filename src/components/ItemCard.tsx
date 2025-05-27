@@ -44,7 +44,7 @@ const ItemCard: React.FC<ItemCardProps> = ({
 }) => {
   const { title, owner, salary, caption, time, image, url, type } = item;
 
-  const displayCaption = truncateText(caption, 100); // طول توضیحات ممکن است نیاز به تنظیم داشته باشد
+  const displayCaption = truncateText(caption, 150); // طول توضیحات ممکن است نیاز به تنظیم داشته باشد
   const isJobType = item.type === "jobinja" || item.type === "jobvision";
 
   const handleViewDetailsLocal = () => {

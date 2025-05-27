@@ -3,7 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function SearchInput() {
+export default function SearchInput({
+  no_mx_auto = false,
+}: {
+  no_mx_auto?: boolean;
+}) {
   const [query, setQuery] = useState("");
   const router = useRouter();
 
@@ -11,7 +15,7 @@ export default function SearchInput() {
     const trimmed = query.trim();
     if (!trimmed) return;
     // جایگزین کردن فاصله با + برای URL
-    const formattedQuery = encodeURIComponent(trimmed.replace(/\s+/g, '+'));
+    const formattedQuery = encodeURIComponent(trimmed.replace(/\s+/g, "+"));
     router.push(`/search/${formattedQuery}`);
   };
 
@@ -23,7 +27,7 @@ export default function SearchInput() {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto" dir="rtl">
+    <div className={`w-full max-w-md ${no_mx_auto ? "" : "mx-auto"}`} dir="rtl">
       <div className="form-control flex flex-row w-full rounded-xl">
         <input
           type="search"
