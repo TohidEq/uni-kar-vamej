@@ -2,6 +2,7 @@
 
 import React, { Suspense } from "react";
 import { Loader2 } from "lucide-react";
+import Navbar from "@/components/Navbar";
 
 export default function SearchLayout({
   children,
@@ -9,7 +10,8 @@ export default function SearchLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div style={{ padding: "1rem" }}>
+    <div className="px-1 sm:p-4">
+      <Navbar enableFavoriteLink={true} />
       <Suspense
         fallback={
           <div

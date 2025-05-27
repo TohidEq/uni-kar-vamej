@@ -167,14 +167,14 @@ export default function SearchKeywordPage() {
 
   return (
     <div
-      className="container mx-auto p-4 sm:p-6 lg:p-8 bg-base-200 min-h-screen"
+      className="container my-container rounded-box mx-auto p-2 sm:p-6 lg:p-8 bg-base-200 min-h-screen"
       dir="rtl"
     >
-      <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 sm:mb-8 text-center text-primary">
-        نتایج جستجو برای: "{String(keyword)}"
-      </h1>
+      {/* <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 sm:mb-8 text-center text-primary">
+        نتایج جستجو برای: «{String(keyword)}»
+      </h1> */}
 
-      <div className="mb-8 p-4 sm:p-6 bg-base-100 rounded-xl shadow-lg">
+      <div className="my-8 p-4 sm:p-6 bg-base-100 rounded-xl shadow-lg">
         {/* بخش فیلترها ... (بدون تغییر از کد قبلی) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
@@ -231,7 +231,7 @@ export default function SearchKeywordPage() {
       {isInitialLoading && (
         <div className="text-center my-10">
           <FaSpinner className="animate-spin text-4xl sm:text-5xl text-primary mx-auto" />
-          <p className="mt-3 text-lg text-gray-700">
+          <p className="mt-3 text-lg opacity-75">
             درحال بارگذاری اولیه نتایج...
           </p>
         </div>
@@ -240,9 +240,7 @@ export default function SearchKeywordPage() {
       {isLoadingMore && (
         <div className="text-center my-6">
           <span className="loading loading-sm loading-dots text-secondary"></span>
-          <p className="mt-1 text-base text-secondary">
-            درحال دریافت نتایج بیشتر...
-          </p>
+          <p className="mt-1 text-base text-secondary">درحال دریافت نتایج...</p>
         </div>
       )}
 
@@ -259,99 +257,101 @@ export default function SearchKeywordPage() {
         </div>
       )}
 
-      {/* بخش تب‌ها */}
-      {!isInitialLoading && !error && (
-        <>
-          <div className="flex justify-center mb-0">
-            {" "}
-            {/* mb-0 چون خود تب‌ها حاشیه پایینی دارند که با محتوا ادغام می‌شود */}
-            <div role="tablist" className="tabs tabs-lifted sm:tabs-lg">
-              {" "}
-              {/* tabs-lg برای تب‌های بزرگتر در صفحات بزرگتر */}
-              <a
-                role="tab"
-                className={`tab h-auto !px-3 !py-2 sm:!px-6 sm:!py-3 text-sm sm:text-base flex items-center gap-2 ${
-                  activeTab === "jobs"
-                    ? "tab-active font-semibold !bg-base-100 "
-                    : "hover:bg-base-300/70"
-                }`}
-                onClick={() => setActiveTab("jobs")}
-              >
-                <FaBriefcase /> مشاغل
-                <span className="badge badge-sm sm:badge-md badge-ghost ml-1">
-                  {totalJobs}
-                </span>
-              </a>
-              <a
-                role="tab"
-                className={`tab h-auto !px-3 !py-2 sm:!px-6 sm:!py-3 text-sm sm:text-base flex items-center gap-2 ${
-                  activeTab === "freelancers"
-                    ? "tab-active font-semibold !bg-base-100 "
-                    : "hover:bg-base-300/70"
-                }`}
-                onClick={() => setActiveTab("freelancers")}
-              >
-                <FaUsersCog /> پروژه‌ها
-                <span className="badge badge-sm sm:badge-md badge-ghost ml-1">
-                  {totalFreelancers}
-                </span>
-              </a>
-            </div>
-          </div>
-
-          {/* محتوای تب‌ها */}
-
-          <div className="bg-base-100 p-4 sm:p-6 rounded-box shadow-xl border-t-0">
-            {activeTab === "jobs" &&
-              (totalJobs > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
-                  {displayedJobs.map((item) => (
-                    <ItemCard
-                      key={`${item.type}-${item.url}`}
-                      item={item as CardItemType}
-                      isFavorite={favoriteItems.includes(item.url)}
-                      onToggleFavorite={handleToggleFavorite}
-                    />
-                  ))}
-                </div>
-              ) : (
-                renderNoResultsMessage("شغلی")
-              ))}
-
-            {activeTab === "freelancers" &&
-              (totalFreelancers > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
-                  {displayedFreelancers.map((item) => (
-                    <ItemCard
-                      key={`${item.type}-${item.url}`}
-                      item={item as CardItemType}
-                      isFavorite={favoriteItems.includes(item.url)}
-                      onToggleFavorite={handleToggleFavorite}
-                    />
-                  ))}
-                </div>
-              ) : (
-                renderNoResultsMessage("پروژه فریلنسری")
-              ))}
-          </div>
-        </>
-      )}
-
       {/* پیام کلی "نتیجه‌ای یافت نشد" اگر هیچ داده‌ای از هوک نیامده باشد */}
       {!isInitialLoading &&
-        !isLoadingMore &&
-        noResultsFromHook &&
-        totalJobs === 0 &&
-        totalFreelancers === 0 &&
-        !error && (
-          <div className="text-center py-12">
-            <FaInfoCircle size={48} className="mx-auto  mb-4" />
-            <p className="text-lg text-gray-600">
-              در حال حاضر هیچ نتیجه‌ای برای "{String(keyword)}" از منابع دریافت
-              نشده است.
-            </p>
-          </div>
-        )}
+      !isLoadingMore &&
+      noResultsFromHook &&
+      totalJobs === 0 &&
+      totalFreelancers === 0 &&
+      !error ? (
+        <div className="text-center py-12">
+          <FaInfoCircle size={48} className="mx-auto  mb-4" />
+          <p className="text-lg text-gray-600">
+            در حال حاضر هیچ نتیجه‌ای برای «{String(keyword)}» از منابع دریافت
+            نشده است.
+          </p>
+        </div>
+      ) : (
+        <>
+          {/* بخش تب‌ها */}
+          {!isInitialLoading && !error && !isLoading && (
+            <>
+              <div className="flex justify-center mb-0">
+                {" "}
+                {/* mb-0 چون خود تب‌ها حاشیه پایینی دارند که با محتوا ادغام می‌شود */}
+                <div role="tablist" className="tabs tabs-lifted sm:tabs-lg">
+                  {" "}
+                  {/* tabs-lg برای تب‌های بزرگتر در صفحات بزرگتر */}
+                  <a
+                    role="tab"
+                    className={`tab rounded-t-box h-auto !px-1 !py-2 sm:!px-6 sm:!py-3 text-sm sm:text-base flex items-center gap-2 ${
+                      activeTab === "jobs"
+                        ? "tab-active font-semibold !bg-base-100 "
+                        : "hover:bg-base-300/70"
+                    }`}
+                    onClick={() => setActiveTab("jobs")}
+                  >
+                    <FaBriefcase className="ms-1" /> مشاغل
+                    <span className="badge badge-sm sm:badge-md badge-ghost px-1 sm:px-1.5 md:px-2 ml-0.5 sm:ml-1">
+                      {totalJobs}
+                    </span>
+                  </a>
+                  <a
+                    role="tab"
+                    className={`tab rounded-t-box h-auto !px-1 !py-2 sm:!px-6 sm:!py-3 text-sm sm:text-base flex items-center gap-2 ${
+                      activeTab === "freelancers"
+                        ? "tab-active font-semibold !bg-base-100 "
+                        : "hover:bg-base-300/70"
+                    }`}
+                    onClick={() => setActiveTab("freelancers")}
+                  >
+                    <FaUsersCog className="ms-1" /> پروژه‌ها
+                    <span className="badge badge-sm sm:badge-md badge-ghost px-1 sm:px-1.5 md:px-2 ml-0.5 sm:ml-1">
+                      {totalFreelancers}
+                    </span>
+                  </a>
+                </div>
+              </div>
+
+              {/* محتوای تب‌ها */}
+
+              <div className="bg-base-100 p-4 sm:p-6 rounded-box shadow-xl border-t-0">
+                {activeTab === "jobs" &&
+                  (totalJobs > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                      {displayedJobs.map((item) => (
+                        <ItemCard
+                          key={`${item.type}-${item.url}`}
+                          item={item as CardItemType}
+                          isFavorite={favoriteItems.includes(item.url)}
+                          onToggleFavorite={handleToggleFavorite}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    renderNoResultsMessage("شغلی")
+                  ))}
+
+                {activeTab === "freelancers" &&
+                  (totalFreelancers > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                      {displayedFreelancers.map((item) => (
+                        <ItemCard
+                          key={`${item.type}-${item.url}`}
+                          item={item as CardItemType}
+                          isFavorite={favoriteItems.includes(item.url)}
+                          onToggleFavorite={handleToggleFavorite}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    renderNoResultsMessage("پروژه فریلنسری")
+                  ))}
+              </div>
+            </>
+          )}
+        </>
+      )}
     </div>
   );
 }

@@ -58,13 +58,14 @@ const ItemCard: React.FC<ItemCardProps> = ({
   return (
     <div
       dir="rtl"
-      className="card w-full max-w-lg bg-base-100 shadow-xl border border-gray-200/80 hover:shadow-2xl transition-shadow duration-300 ease-in-out mx-auto rounded-lg"
+      className="card w-full max-w-lg bg-base-100 shadow-xl border border-gray-200/20 hover:shadow-2xl transition-shadow duration-300 ease-in-out mx-auto rounded-box"
     >
       <div className="card-body p-4 sm:p-5 flex flex-col">
         {/* بخش بالایی: تصویر کوچک + (عنوان/مالک/دستمزد/مکان) */}
         <div className="flex items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
           {/* تصویر کوچک و گرد شده در سمت راست */}
           <div className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={image || DEFAULT_IMAGE_URL_SQUARE}
               alt={title || "تصویر آگهی"}
@@ -109,7 +110,7 @@ const ItemCard: React.FC<ItemCardProps> = ({
         </div>
 
         {/* توضیحات */}
-        <p className="text-sm text-gray-700 mb-3 sm:mb-4 leading-relaxed min-h-[40px] sm:min-h-[60px]">
+        <p className="text-sm opacity-75 mb-3 sm:mb-4 leading-relaxed min-h-[40px] sm:min-h-[60px]">
           {displayCaption}
         </p>
 
@@ -128,14 +129,14 @@ const ItemCard: React.FC<ItemCardProps> = ({
         </div>
 
         {/* بخش دکمه‌ها و قلب */}
-        <div className="card-actions justify-between items-center border-t border-gray-200/60 pt-3 sm:pt-4 mt-auto">
+        <div className="card-actions justify-between items-center border-t border-gray-200/10 pt-3 sm:pt-4 mt-auto">
           {/* گروه دکمه‌های اصلی در سمت راست */}
-          <div className="flex gap-1.5 sm:gap-2">
+          <div className="flex gap-2">
             <a
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-outline btn-primary btn-sm !text-xs sm:!text-sm !leading-none"
+              className="btn btn-outline px-1.5 sm:!px-4 md:!px-6 btn-primary btn-sm !text-xs sm:!text-sm !leading-none"
             >
               <FaExternalLinkAlt className="ml-1 sm:ml-2" />
               آگهی اصلی
@@ -143,7 +144,7 @@ const ItemCard: React.FC<ItemCardProps> = ({
             <Link href="/one-result" legacyBehavior>
               <a
                 onClick={handleViewDetailsLocal}
-                className="btn btn-primary btn-sm !text-xs sm:!text-sm !leading-none"
+                className="btn btn-primary px-1.5 sm:!px-4 md:!px-6 btn-sm !text-xs sm:!text-sm !leading-none"
               >
                 <FaInfoCircle className="ml-1 sm:ml-2" />
                 جزئیات
