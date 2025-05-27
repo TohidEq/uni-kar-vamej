@@ -19,7 +19,6 @@ export default function RootLayout({
         <ThemeInitializer />
         {/* محتوا + رشددهنده برای گرفتن فضای خالی */}
         <main className="flex-1">
-          
           {children}
         </main>
 

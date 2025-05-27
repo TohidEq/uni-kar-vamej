@@ -4,7 +4,7 @@ export default function SearchPage() {
       className="min-h-screen flex items-center justify-center text-center"
       dir="rtl"
     >
-      <h1 className="text-xl text-gray-500">هیچ عبارتی وارد نشده!</h1>
+      <h1 className="text-xl opactiy-70">هیچ عبارتی وارد نشده!</h1>
     </div>
   );
 }

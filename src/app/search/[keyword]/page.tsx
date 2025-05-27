@@ -3,11 +3,19 @@
 
 import { useParams } from "next/navigation";
 import React, { useEffect, useState, useMemo } from "react";
-import { useSearchAllSites, SiteName } from "@/hooks/useSearchAllSites"; // SiteName رو هم از هوک ایمپورت می‌کنیم
-// اطمینان حاصل کنید که مسیر itemTypes درست است و این تایپ‌ها در آن فایل تعریف شده‌اند
-import type { JobItem, FreelancerItem } from "@/types/itemTypes";
+import { useSearchAllSites, SiteName } from "@/hooks/useSearchAllSites";
 
-// این لیست را می‌توان از SITES_CONFIG در هوک یا یک فایل مشترک خواند
+import ItemCard from "@/components/ItemCard";
+import type { Item as CardItemType } from "@/components/ItemCard";
+import {
+  FaBriefcase,
+  FaUsersCog,
+  FaExclamationCircle,
+  FaInfoCircle,
+  FaSearch,
+  FaSpinner,
+} from "react-icons/fa"; // آیکون‌ها برای تب‌ها و پیام‌ها
+
 const ALL_AVAILABLE_SITES: SiteName[] = [
   "karlancer",
   "punisha",
@@ -24,11 +32,12 @@ interface AggregatedResults {
   freelancers: FreelancerItem[];
 }
 
+type ActiveTabType = "jobs" | "freelancers";
+
 export default function SearchKeywordPage() {
   const params = useParams();
   const keyword = params.keyword;
 
-  // 1. State برای فیلترهای فرانت‌اند و بک‌اند
   const [frontFilter, setFrontFilter] = useState<FilterState>({
     ignoredSites: [],
   });
@@ -36,17 +45,12 @@ export default function SearchKeywordPage() {
     ignoredSites: [],
   });
 
-  // 2. هوک جستجو که backFilter.ignoredSites را به عنوان ورودی می‌گیرد
   const {
     results: rawResultsFromHook,
     isLoading,
     error,
-  } = useSearchAllSites(
-    keyword,
-    backFilter.ignoredSites // پاس دادن ignoredSites از backFilter به هوک
-  );
+  } = useSearchAllSites(keyword, backFilter.ignoredSites);
 
-  // 3. State برای نتایج تجمیع شده
   const [aggregatedResults, setAggregatedResults] = useState<AggregatedResults>(
     {
       jobs: [],
@@ -54,7 +58,28 @@ export default function SearchKeywordPage() {
     }
   );
 
-  // 4. useEffect برای تجمیع نتایج خام دریافتی از هوک
+  const [favoriteItems, setFavoriteItems] = useState<string[]>([]);
+  const [activeTab, setActiveTab] = useState<ActiveTabType>("jobs"); // State برای تب فعال
+
+  useEffect(() => {
+    const storedFavorites = localStorage.getItem("favoriteItems");
+    if (storedFavorites) {
+      setFavoriteItems(JSON.parse(storedFavorites));
+    }
+  }, []);
+
+  const handleToggleFavorite = (item: CardItemType) => {
+    const itemId = item.url;
+    let updatedFavorites: string[];
+    if (favoriteItems.includes(itemId)) {
+      updatedFavorites = favoriteItems.filter((id) => id !== itemId);
+    } else {
+      updatedFavorites = [...favoriteItems, itemId];
+    }
+    setFavoriteItems(updatedFavorites);
+    localStorage.setItem("favoriteItems", JSON.stringify(updatedFavorites));
+  };
+
   useEffect(() => {
     const newJobs: JobItem[] = [];
     if (rawResultsFromHook.jobinja) newJobs.push(...rawResultsFromHook.jobinja);
@@ -68,211 +93,264 @@ export default function SearchKeywordPage() {
       newFreelancers.push(...rawResultsFromHook.punisha);
 
     setAggregatedResults({ jobs: newJobs, freelancers: newFreelancers });
-  }, [rawResultsFromHook]); // این افکت با تغییر نتایج هوک اجرا می‌شود
 
-  // 5. useMemo برای اعمال frontFilter روی نتایج تجمیع شده (فیلتر سمت کلاینت)
+    // اگر تب فعلی مشاغل است و نتیجه‌ای برای مشاغل نیامده اما برای فریلنسرها آمده، تب را عوض کن
+    if (
+      activeTab === "jobs" &&
+      newJobs.length === 0 &&
+      newFreelancers.length > 0
+    ) {
+      // setActiveTab('freelancers'); // یا این منطق را بر اساس اولویت کاربر تنظیم کنید
+    } else if (
+      activeTab === "freelancers" &&
+      newFreelancers.length === 0 &&
+      newJobs.length > 0
+    ) {
+      // setActiveTab('jobs');
+    }
+  }, [rawResultsFromHook]); // activeTab را از وابستگی‌ها حذف کردیم تا باعث حلقه نشود
+
   const displayedJobs = useMemo(() => {
-    if (!aggregatedResults.jobs) return [];
     return aggregatedResults.jobs.filter(
       (job) => !frontFilter.ignoredSites.includes(job.type as SiteName)
     );
   }, [aggregatedResults.jobs, frontFilter.ignoredSites]);
 
   const displayedFreelancers = useMemo(() => {
-    if (!aggregatedResults.freelancers) return [];
     return aggregatedResults.freelancers.filter(
       (freelancer) =>
         !frontFilter.ignoredSites.includes(freelancer.type as SiteName)
     );
   }, [aggregatedResults.freelancers, frontFilter.ignoredSites]);
 
-  // توابع برای مدیریت تغییرات در چک‌باکس‌های فیلتر
   const handleFilterChange = (
     site: SiteName,
-    isChecked: boolean, // true if "ignore this site" is checked
+    isChecked: boolean,
     filterType: "front" | "back"
   ) => {
     const setter = filterType === "front" ? setFrontFilter : setBackFilter;
     setter((prevFilter) => {
       const currentIgnored = prevFilter.ignoredSites;
       if (isChecked) {
-        // Add to ignored sites
-        return {
-          ignoredSites: [...currentIgnored, site].filter(
-            (value, index, self) => self.indexOf(value) === index
-          ),
-        }; // Ensure unique
+        return { ignoredSites: Array.from(new Set([...currentIgnored, site])) };
       } else {
-        // Remove from ignored sites
         return { ignoredSites: currentIgnored.filter((s) => s !== site) };
       }
     });
   };
 
-  if (
+  const totalJobs = displayedJobs.length;
+  const totalFreelancers = displayedFreelancers.length;
+  const noResultsFromHook =
+    rawResultsFromHook &&
+    Object.values(rawResultsFromHook).every(
+      (val) => val === null || val.length === 0
+    );
+
+  const isInitialLoading =
     isLoading &&
-    displayedJobs.length === 0 &&
-    displayedFreelancers.length === 0
-  ) {
-    return (
-      <div dir="rtl" className="container mx-auto p-4">
-        درحال بارگذاری اولیه نتایج برای "{String(keyword)}"...
-      </div>
-    );
-  }
+    totalJobs === 0 &&
+    totalFreelancers === 0 &&
+    !error &&
+    !noResultsFromHook;
+  const isLoadingMore =
+    isLoading && (totalJobs > 0 || totalFreelancers > 0 || noResultsFromHook);
 
-  if (error) {
-    return (
-      <div dir="rtl" className="container mx-auto p-4">
-        <p className="text-red-500">خطا در دریافت اطلاعات:</p>
-        <pre className="whitespace-pre-wrap">{error}</pre>
-      </div>
-    );
-  }
-
-  // شمارش تعداد کل آیتم‌های نمایش داده شده
-  const totalDisplayedItems =
-    displayedJobs.length + displayedFreelancers.length;
+  const renderNoResultsMessage = (itemType: string) => (
+    <div className="text-center py-12">
+      <FaSearch size={48} className="mx-auto  mb-4" />
+      <p className="text-lg text-gray-600">
+        هیچ {itemType} مطابق با جستجو و فیلتر شما یافت نشد.
+      </p>
+    </div>
+  );
 
   return (
-    <div className="container mx-auto p-4" dir="rtl">
-      <h1 className="text-2xl font-bold mb-6">
+    <div
+      className="container mx-auto p-4 sm:p-6 lg:p-8 bg-base-200 min-h-screen"
+      dir="rtl"
+    >
+      <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 sm:mb-8 text-center text-primary">
         نتایج جستجو برای: "{String(keyword)}"
       </h1>
 
-      {/* بخش فیلترها */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 p-4 border rounded-lg">
-        <div>
-          <h3 className="text-lg font-semibold mb-2">
-            فیلتر نمایش (سمت کاربر):
-          </h3>
-          {ALL_AVAILABLE_SITES.map((site) => (
-            <label key={`front-filter-${site}`} className="mr-4 block">
-              <input
-                type="checkbox"
-                className="ml-2"
-                checked={frontFilter.ignoredSites.includes(site)}
-                onChange={(e) =>
-                  handleFilterChange(site, e.target.checked, "front")
-                }
-              />
-              نادیده گرفتن {site}
-            </label>
-          ))}
-        </div>
-        <div>
-          <h3 className="text-lg font-semibold mb-2">
-            فیلتر جستجو (سمت سرور - نیاز به جستجوی مجدد):
-          </h3>
-          {ALL_AVAILABLE_SITES.map((site) => (
-            <label key={`back-filter-${site}`} className="mr-4 block">
-              <input
-                type="checkbox"
-                className="ml-2"
-                checked={backFilter.ignoredSites.includes(site)}
-                onChange={(e) =>
-                  handleFilterChange(site, e.target.checked, "back")
-                }
-              />
-              نادیده گرفتن {site} در جستجوی بعدی
-            </label>
-          ))}
+      <div className="mb-8 p-4 sm:p-6 bg-base-100 rounded-xl shadow-lg">
+        {/* بخش فیلترها ... (بدون تغییر از کد قبلی) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h3 className="text-lg sm:text-xl font-semibold mb-3 ">
+              فیلتر نمایش (سمت کاربر):
+            </h3>
+            <div className="space-y-2">
+              {ALL_AVAILABLE_SITES.map((site) => (
+                <div className="form-control" key={`front-filter-${site}`}>
+                  <label className="label cursor-pointer justify-start p-0">
+                    <input
+                      type="checkbox"
+                      className="checkbox checkbox-sm checkbox-secondary mr-3"
+                      checked={frontFilter.ignoredSites.includes(site)}
+                      onChange={(e) =>
+                        handleFilterChange(site, e.target.checked, "front")
+                      }
+                    />
+                    <span className="label-text text-sm sm:text-base">
+                      نادیده گرفتن {site}
+                    </span>
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <h3 className="text-lg sm:text-xl font-semibold mb-3 ">
+              فیلتر جستجو (سمت سرور):
+            </h3>
+            <div className="space-y-2">
+              {ALL_AVAILABLE_SITES.map((site) => (
+                <div className="form-control" key={`back-filter-${site}`}>
+                  <label className="label cursor-pointer justify-start p-0">
+                    <input
+                      type="checkbox"
+                      className="checkbox checkbox-sm checkbox-secondary mr-3"
+                      checked={backFilter.ignoredSites.includes(site)}
+                      onChange={(e) =>
+                        handleFilterChange(site, e.target.checked, "back")
+                      }
+                    />
+                    <span className="label-text text-sm sm:text-base">
+                      نادیده گرفتن {site} در جستجوی بعدی
+                    </span>
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
-      {isLoading && (
-        <p className="my-4 text-blue-600">درحال بارگذاری نتایج بیشتر...</p>
-      )}
-
-      {/* نمایش نتایج فریلنسرها */}
-      {displayedFreelancers.length > 0 && (
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-3">
-            پروژه‌های فریلنسری ({displayedFreelancers.length})
-          </h2>
-          <ul>
-            {displayedFreelancers.map((item, index) => (
-              <li
-                key={`freelancer-${item.type}-${index}`}
-                className="border p-3 my-2 rounded-md shadow-sm hover:shadow-md transition-shadow"
-              >
-                <a
-                  href={item.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline text-lg font-medium"
-                >
-                  {item.title}
-                </a>
-                <p className="text-sm text-gray-600">منبع: {item.type}</p>
-                {item.salary && (
-                  <p className="text-sm text-gray-700">
-                    حقوق: {String(item.salary)}
-                  </p>
-                )}
-                {item.caption && (
-                  <p className="text-sm text-gray-500 mt-1 truncate">
-                    {item.caption}
-                  </p>
-                )}
-                {/* سایر اطلاعات آیتم */}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {/* نمایش نتایج شغل‌ها */}
-      {displayedJobs.length > 0 && (
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-3">
-            آگهی‌های شغلی ({displayedJobs.length})
-          </h2>
-          <ul>
-            {displayedJobs.map((item, index) => (
-              <li
-                key={`job-${item.type}-${index}`}
-                className="border p-3 my-2 rounded-md shadow-sm hover:shadow-md transition-shadow"
-              >
-                <a
-                  href={item.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline text-lg font-medium"
-                >
-                  {item.title}
-                </a>
-                <p className="text-sm text-gray-600">
-                  شرکت: {item.owner} (منبع: {item.type})
-                </p>
-                {item.location && (
-                  <p className="text-sm text-gray-700">
-                    موقعیت: {item.location}
-                  </p>
-                )}
-                {/* سایر اطلاعات آیتم */}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {!isLoading && totalDisplayedItems === 0 && !error && (
-        <p>
-          هیچ نتیجه‌ای مطابق با فیلترهای شما برای "{String(keyword)}" یافت نشد.
-        </p>
-      )}
-      {!isLoading &&
-        rawResultsFromHook &&
-        totalDisplayedItems === 0 &&
-        Object.values(rawResultsFromHook).every(
-          (val) => val === null || val.length === 0
-        ) &&
-        !error && (
-          <p>
-            در حال حاضر هیچ نتیجه‌ای برای "{String(keyword)}" از منابع دریافت
-            نشده است.
+      {isInitialLoading && (
+        <div className="text-center my-10">
+          <FaSpinner className="animate-spin text-4xl sm:text-5xl text-primary mx-auto" />
+          <p className="mt-3 text-lg text-gray-700">
+            درحال بارگذاری اولیه نتایج...
           </p>
+        </div>
+      )}
+
+      {isLoadingMore && (
+        <div className="text-center my-6">
+          <span className="loading loading-sm loading-dots text-secondary"></span>
+          <p className="mt-1 text-base text-secondary">
+            درحال دریافت نتایج بیشتر...
+          </p>
+        </div>
+      )}
+
+      {error && (
+        <div
+          role="alert"
+          className="alert alert-error my-8 shadow-md items-start"
+        >
+          <FaExclamationCircle className="text-2xl mt-1" />
+          <div>
+            <h3 className="font-bold text-lg">خطا در دریافت اطلاعات!</h3>
+            <div className="text-sm whitespace-pre-wrap">{error}</div>
+          </div>
+        </div>
+      )}
+
+      {/* بخش تب‌ها */}
+      {!isInitialLoading && !error && (
+        <>
+          <div className="flex justify-center mb-0">
+            {" "}
+            {/* mb-0 چون خود تب‌ها حاشیه پایینی دارند که با محتوا ادغام می‌شود */}
+            <div role="tablist" className="tabs tabs-lifted sm:tabs-lg">
+              {" "}
+              {/* tabs-lg برای تب‌های بزرگتر در صفحات بزرگتر */}
+              <a
+                role="tab"
+                className={`tab h-auto !px-3 !py-2 sm:!px-6 sm:!py-3 text-sm sm:text-base flex items-center gap-2 ${
+                  activeTab === "jobs"
+                    ? "tab-active font-semibold !bg-base-100 "
+                    : "hover:bg-base-300/70"
+                }`}
+                onClick={() => setActiveTab("jobs")}
+              >
+                <FaBriefcase /> مشاغل
+                <span className="badge badge-sm sm:badge-md badge-ghost ml-1">
+                  {totalJobs}
+                </span>
+              </a>
+              <a
+                role="tab"
+                className={`tab h-auto !px-3 !py-2 sm:!px-6 sm:!py-3 text-sm sm:text-base flex items-center gap-2 ${
+                  activeTab === "freelancers"
+                    ? "tab-active font-semibold !bg-base-100 "
+                    : "hover:bg-base-300/70"
+                }`}
+                onClick={() => setActiveTab("freelancers")}
+              >
+                <FaUsersCog /> پروژه‌ها
+                <span className="badge badge-sm sm:badge-md badge-ghost ml-1">
+                  {totalFreelancers}
+                </span>
+              </a>
+            </div>
+          </div>
+
+          {/* محتوای تب‌ها */}
+
+          <div className="bg-base-100 p-4 sm:p-6 rounded-box shadow-xl border-t-0">
+            {activeTab === "jobs" &&
+              (totalJobs > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
+                  {displayedJobs.map((item) => (
+                    <ItemCard
+                      key={`${item.type}-${item.url}`}
+                      item={item as CardItemType}
+                      isFavorite={favoriteItems.includes(item.url)}
+                      onToggleFavorite={handleToggleFavorite}
+                    />
+                  ))}
+                </div>
+              ) : (
+                renderNoResultsMessage("شغلی")
+              ))}
+
+            {activeTab === "freelancers" &&
+              (totalFreelancers > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
+                  {displayedFreelancers.map((item) => (
+                    <ItemCard
+                      key={`${item.type}-${item.url}`}
+                      item={item as CardItemType}
+                      isFavorite={favoriteItems.includes(item.url)}
+                      onToggleFavorite={handleToggleFavorite}
+                    />
+                  ))}
+                </div>
+              ) : (
+                renderNoResultsMessage("پروژه فریلنسری")
+              ))}
+          </div>
+        </>
+      )}
+
+      {/* پیام کلی "نتیجه‌ای یافت نشد" اگر هیچ داده‌ای از هوک نیامده باشد */}
+      {!isInitialLoading &&
+        !isLoadingMore &&
+        noResultsFromHook &&
+        totalJobs === 0 &&
+        totalFreelancers === 0 &&
+        !error && (
+          <div className="text-center py-12">
+            <FaInfoCircle size={48} className="mx-auto  mb-4" />
+            <p className="text-lg text-gray-600">
+              در حال حاضر هیچ نتیجه‌ای برای "{String(keyword)}" از منابع دریافت
+              نشده است.
+            </p>
+          </div>
         )}
     </div>
   );

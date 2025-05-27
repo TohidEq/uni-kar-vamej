@@ -42,7 +42,7 @@ export default async function getKarlancerAll(
             .text()
             .trim()
         ),
-        image: $(element).find("img").attr("src") || null, // Assuming an image might exist
+        image: null, // karlancer has no img for cards... //$(element).find("img").attr("src") || null, // Assuming an image might exist
         time: $(element).find(".fs-13.text-nowrap.br-90").text().trim() || null,
         owner:
           $(element)
