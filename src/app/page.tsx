@@ -18,7 +18,7 @@ export default function Home() {
   // TODO: font fix for main title and Shoaar and other...
   return (
     <div className="main min-h-screen flex flex-col">
-      <Navbar enableFavoriteLink={true} />
+      <Navbar enableFavoriteLink={hasFavorites} />
 
       {/* محتوای اصلی در یک‌سوم بالای صفحه */}
       <div
@@ -37,7 +37,7 @@ export default function Home() {
 
           <SearchInput />
 
-          {!hasFavorites && (
+          {hasFavorites && (
             <div className="mt-4 text-sm flex items-center gap-1 justify-center">
               <Link
                 href="/favorites"

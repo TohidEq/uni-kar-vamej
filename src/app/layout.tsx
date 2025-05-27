@@ -18,7 +18,10 @@ export default function RootLayout({
       <body className={`antialiased flex flex-col min-h-screen`}>
         <ThemeInitializer />
         {/* محتوا + رشددهنده برای گرفتن فضای خالی */}
-        <main className="flex-1">{children}</main>
+        <main className="flex-1">
+          
+          {children}
+        </main>
 
         <Footer />
       </body>
