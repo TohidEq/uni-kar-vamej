@@ -15,6 +15,7 @@ import {
   FaSearch,
   FaSpinner,
 } from "react-icons/fa"; // آیکون‌ها برای تب‌ها و پیام‌ها
+import SearchInput from "@/components/SearchInput";
 
 const ALL_AVAILABLE_SITES: SiteName[] = [
   "karlancer",
@@ -165,16 +166,42 @@ export default function SearchKeywordPage() {
     </div>
   );
 
+  const [showFilterBox, setShowFilterBox] = useState(false);
+  const handleFilter = () => {
+    setShowFilterBox(!showFilterBox);
+  };
   return (
     <div
       className="container my-container rounded-box mx-auto p-2 sm:p-6 lg:p-8 bg-base-200 min-h-screen"
       dir="rtl"
     >
-      {/* <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 sm:mb-8 text-center text-primary">
-        نتایج جستجو برای: «{String(keyword)}»
-      </h1> */}
+      <div className="search">
+        <button
+          className="btn btn-primary rounded-3xl px-3 ms-2"
+          onClick={handleFilter}
+          aria-label="فیلتر"
+        >
+          <svg
+            className="w-5 h-5"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2.5}
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </button>
+        <SearchInput />
+      </div>
+      {/*
+       */}
 
-      <div className="my-8 p-4 sm:p-6 bg-base-100 rounded-xl shadow-lg">
+      <div
+        className={`${showFilterBox ? "auto-height" : "no-height"}transition-all
+        duration-500 ease-in-out my-8 p-4 sm:p-6 bg-base-100 rounded-xl shadow-lg`}
+      >
         {/* بخش فیلترها ... (بدون تغییر از کد قبلی) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
@@ -227,6 +254,10 @@ export default function SearchKeywordPage() {
           </div>
         </div>
       </div>
+
+      <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 sm:mb-8 text-center text-primary">
+        نتایج جستجو برای: «{String(keyword)}»
+      </h1>
 
       {isInitialLoading && (
         <div className="text-center my-10">

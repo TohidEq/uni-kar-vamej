@@ -920,17 +920,11 @@
       }
     }
   }
-  .ms-0\.5 {
-    margin-inline-start: calc(var(--spacing) * 0.5);
-  }
   .ms-1 {
     margin-inline-start: calc(var(--spacing) * 1);
   }
   .ms-2 {
     margin-inline-start: calc(var(--spacing) * 2);
-  }
-  .ms-10 {
-    margin-inline-start: calc(var(--spacing) * 10);
   }
   .mt-1 {
     margin-top: calc(var(--spacing) * 1);
@@ -970,9 +964,6 @@
   }
   .mb-4 {
     margin-bottom: calc(var(--spacing) * 4);
-  }
-  .mb-6 {
-    margin-bottom: calc(var(--spacing) * 6);
   }
   .mb-10 {
     margin-bottom: calc(var(--spacing) * 10);
@@ -1452,6 +1443,9 @@
   .pt-4 {
     padding-top: calc(var(--spacing) * 4);
   }
+  .pt-30 {
+    padding-top: calc(var(--spacing) * 30);
+  }
   .pt-\[10vh\] {
     padding-top: 10vh;
   }
@@ -1825,11 +1819,6 @@
       width: calc(var(--spacing) * 20);
     }
   }
-  .sm\:gap-2 {
-    @media (width >= 40rem) {
-      gap: calc(var(--spacing) * 2);
-    }
-  }
   .sm\:gap-4 {
     @media (width >= 40rem) {
       gap: calc(var(--spacing) * 4);
@@ -1895,10 +1884,10 @@
       line-height: var(--tw-leading, var(--text-sm--line-height)) !important;
     }
   }
-  .sm\:text-3xl {
+  .sm\:text-2xl {
     @media (width >= 40rem) {
-      font-size: var(--text-3xl);
-      line-height: var(--tw-leading, var(--text-3xl--line-height));
+      font-size: var(--text-2xl);
+      line-height: var(--tw-leading, var(--text-2xl--line-height));
     }
   }
   .sm\:text-5xl {
@@ -2005,12 +1994,6 @@
       line-height: var(--tw-leading, var(--text-3xl--line-height));
     }
   }
-  .lg\:text-4xl {
-    @media (width >= 64rem) {
-      font-size: var(--text-4xl);
-      line-height: var(--tw-leading, var(--text-4xl--line-height));
-    }
-  }
 }
 @import url("https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap");
 .vazirmatn-100 {
@@ -2102,6 +2085,12 @@
 }
 .custom-link-underline:hover::after {
   transform: translateX(-50%) scaleX(1);
+}
+.no-height {
+  max-height: calc(var(--spacing) * 0);
+}
+.height-auto {
+  max-height: 900px;
 }
 .footer-link {
   position: relative;

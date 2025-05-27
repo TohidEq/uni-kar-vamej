@@ -46,3 +46,11 @@ button {
 .custom-link-underline:hover::after {
   transform: translateX(-50%) scaleX(1);
 }
+
+.no-height {
+  @apply max-h-0;
+}
+
+.height-auto {
+  @apply max-h-[900px];
+}

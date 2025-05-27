@@ -1,3 +1,4 @@
+"use client";
 // src/components/ItemCard.tsx
 import React from "react";
 import {
@@ -25,7 +26,7 @@ interface ItemCardProps {
 }
 
 const DEFAULT_IMAGE_URL_SQUARE =
-  "https://placehold.co/120x120/e2e8f0/a0aec0?text=:)&font=tahoma"; // کمی بزرگتر برای وضوح بهتر
+  "https://placehold.co/120x120/23262c/bdbb91?text=:)&font=tahoma"; // کمی بزرگتر برای وضوح بهتر
 
 const truncateText = (
   text: string | null | undefined,

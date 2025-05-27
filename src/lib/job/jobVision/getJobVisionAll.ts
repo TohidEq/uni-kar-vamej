@@ -66,6 +66,8 @@ export default async function getJobvisionAll(
 
       // Ensure required fields are present
       if (item.url && item.title !== "") {
+        if (item.image && !item.image.includes("https"))
+          item.image = `https://jobvision.ir/${item.image}`;
         items.push(item);
       }
     });
