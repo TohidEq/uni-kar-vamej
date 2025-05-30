@@ -1,15 +1,11 @@
 "use client";
 
-import { useParams } from "next/navigation";
-import { useState, useEffect } from "react";
-import { FaSpinner, FaInfoCircle } from "react-icons/fa";
-import SearchInput from "@/components/SearchInput";
+import { useEffect, useState } from "react";
+import { FaInfoCircle } from "react-icons/fa";
 import FilterBox from "@/components/search/FilterBox";
 import ResultsTabs from "@/components/search/ResultsTabs";
-import { useSearchAllSites, SiteName } from "@/hooks/useSearchAllSites";
 import { useFavorites } from "@/hooks/useFavorites";
 // import { JobItem, FreelancerItem } from "@/types/itemTypes";
-import { sortItemsByPrice } from "@/utils/searchUtils";
 
 interface AggregatedResults {
   jobs: JobItem[];
@@ -17,7 +13,7 @@ interface AggregatedResults {
 }
 
 type ActiveTabType = "jobs" | "freelancers";
-type SortOrderType = "none" | "asc" | "desc";
+type SiteName = "karlancer" | "punisha" | "jobinja" | "jobvision";
 
 const ALL_AVAILABLE_SITES: SiteName[] = [
   "karlancer",
@@ -25,16 +21,14 @@ const ALL_AVAILABLE_SITES: SiteName[] = [
   "jobinja",
   "jobvision",
 ];
-const IGNORED_SITES_LOCAL_STORAGE_KEY = "searchPageIgnoredSites";
+const IGNORED_SITES_LOCAL_STORAGE_KEY = "favoritesPageIgnoredSites";
 
-export default function SearchKeywordPage() {
-  console.log("SearchKeywordPage Rendering");
-  const { keyword } = useParams<{ keyword: string }>();
+export default function FavoritesPage() {
+  console.log("FavoritesPage Rendering");
+
   const [activeTab, setActiveTab] = useState<ActiveTabType>("jobs");
-  const [sortOrder, setSortOrder] = useState<SortOrderType>("none");
   const [ignoredSites, setIgnoredSites] = useState<SiteName[]>([]);
   const [ignoredSites_apply, setIgnoredSites_apply] = useState<SiteName[]>([]);
-
   const [aggregatedResults, setAggregatedResults] = useState<AggregatedResults>(
     {
       jobs: [],
@@ -42,18 +36,9 @@ export default function SearchKeywordPage() {
     }
   );
   const { favoriteItems, toggleFavorite } = useFavorites();
-  const {
-    results: rawResults,
-    isLoading,
-    error,
-  } = useSearchAllSites(keyword, ignoredSites_apply);
+  const [showFilterBox, setShowFilterBox] = useState(false);
 
-  // Log rawResults for debugging
-  console.log("Raw Results:", rawResults);
-  console.log("isLoading:", isLoading);
-  console.log("error:", error);
-
-  // Load ignored sites from localStorage on mount and keyword change
+  // Load ignored sites from localStorage on mount
   useEffect(() => {
     const storedIgnoredSites = localStorage.getItem(
       IGNORED_SITES_LOCAL_STORAGE_KEY
@@ -63,54 +48,38 @@ export default function SearchKeywordPage() {
       : [];
     setIgnoredSites(initialSites);
     setIgnoredSites_apply(initialSites);
-  }, [keyword]);
+  }, []);
 
-  // Aggregate results from multiple sites
+  // Aggregate favorite items
   useEffect(() => {
     console.log("++++++++++++++++++++++++++++++++++++");
-    console.log("Aggregating results...");
-    console.log("Raw Results in useEffect:");
-    console.log(rawResults);
+    console.log("Aggregating favorite items...");
+    console.log("Favorite Items:", favoriteItems);
     console.log("++++++++++++++++++++++++++++++++++++");
 
-    const jobs: JobItem[] = [
-      ...(rawResults.jobinja ?? []),
-      ...(rawResults.jobvision ?? []),
-    ];
-    const freelancers: FreelancerItem[] = [
-      ...(rawResults.karlancer ?? []),
-      ...(rawResults.punisha ?? []),
-    ];
+    const jobs: JobItem[] = favoriteItems.filter(
+      (item): item is JobItem =>
+        item.type === "jobinja" || item.type === "jobvision"
+    );
+    const freelancers: FreelancerItem[] = favoriteItems.filter(
+      (item): item is FreelancerItem =>
+        item.type === "karlancer" || item.type === "punisha"
+    );
 
     setAggregatedResults({ jobs, freelancers });
 
     console.log("Aggregated Results:", { jobs, freelancers });
     console.log("++++++++++++++++++++++++++++++++++++");
-  }, [rawResults]);
+  }, [favoriteItems]);
 
-  // Filter and sort displayed results
-  const displayedJobs = sortItemsByPrice(
-    aggregatedResults.jobs.filter(
-      (job) => !ignoredSites.includes(job.type as SiteName)
-    ),
-    sortOrder
+  // Filter displayed results
+  const displayedJobs = aggregatedResults.jobs.filter(
+    (job) => !ignoredSites_apply.includes(job.type as SiteName)
   );
 
-  const displayedFreelancers = sortItemsByPrice(
-    aggregatedResults.freelancers.filter(
-      (freelancer) => !ignoredSites.includes(freelancer.type as SiteName)
-    ),
-    sortOrder
+  const displayedFreelancers = aggregatedResults.freelancers.filter(
+    (freelancer) => !ignoredSites_apply.includes(freelancer.type as SiteName)
   );
-
-  // Determine loading states
-  const isInitialLoading =
-    isLoading &&
-    displayedJobs.length === 0 &&
-    displayedFreelancers.length === 0 &&
-    !error;
-
-  const isLoadingMore = isLoading && !isInitialLoading;
 
   // Handle filter changes
   const handleFilterChange = (site: SiteName, isChecked: boolean) => {
@@ -124,13 +93,11 @@ export default function SearchKeywordPage() {
     );
   };
 
-  const [showFilterBox, setShowFilterBox] = useState(false);
-
-  const fiterBtn = (
+  const filterBtn = (
     <button
       className="btn btn-primary join-item rounded-full me-2 !px-3"
       onClick={() => setShowFilterBox(!showFilterBox)}
-      aria-label="نمایش/مخفی کردن فیلترها و مرتب‌سازی"
+      aria-label="نمایش/مخفی کردن فیلترها"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -152,17 +119,14 @@ export default function SearchKeywordPage() {
       className="container my-container rounded-box mx-auto p-2 sm:p-6 lg:p-8 bg-base-200 min-h-screen"
       dir="rtl"
     >
-      {/* Search and Filter Button */}
+      {/* Filter Button */}
       <div className="join w-full mb-3 print:hidden">
-        <div className="flex join-item w-full justify-center">
-          {fiterBtn}
-          <SearchInput no_mx_auto={true} default_value={keyword} />
-        </div>
+        <div className="flex join-item w-full justify-center">{filterBtn}</div>
       </div>
 
       <button
-        className={`button btn w-full mx-auto max-w-[390px] btn-primary my-3 ${
-          ignoredSites_apply != ignoredSites ? "block" : "hidden"
+        className={`btn w-full mx-auto max-w-[390px] btn-primary my-3 ${
+          ignoredSites_apply !== ignoredSites ? "block" : "hidden"
         }`}
         onClick={() => setIgnoredSites_apply(ignoredSites)}
       >
@@ -174,34 +138,28 @@ export default function SearchKeywordPage() {
         allSites={ALL_AVAILABLE_SITES}
         ignoredSites={ignoredSites}
         onFilterChange={handleFilterChange}
-        sortOrder={sortOrder}
-        onSortChange={setSortOrder}
+        sortOrder="none"
+        onSortChange={() => {}} // مرتب‌سازی غیرفعال
         showFilterBox={showFilterBox}
       />
 
       {/* Page Title */}
       <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold my-4 sm:mb-8 text-center text-primary">
-        نتایج جستجو برای: «{keyword}»
+        آیتم‌های مورد علاقه
       </h1>
 
-      {/* Loading State */}
-      {isInitialLoading && (
-        <div className="text-center my-10">
-          <FaSpinner className="animate-spin text-4xl sm:text-5xl text-primary mx-auto" />
-          <p className="mt-3 text-lg opacity-75">درحال بارگذاری نتایج...</p>
-        </div>
-      )}
-
-      {/* Error State */}
-      {error && (
+      {/* Empty State */}
+      {displayedJobs.length === 0 && displayedFreelancers.length === 0 && (
         <div
           role="alert"
-          className="alert alert-error my-8 shadow-md items-start"
+          className="alert alert-info my-8 shadow-md items-start"
         >
           <FaInfoCircle className="text-2xl mt-1 shrink-0" />
           <div>
-            <h3 className="font-bold text-lg">خطا در دریافت اطلاعات!</h3>
-            <p className="text-sm whitespace-pre-wrap">{error}</p>
+            <h3 className="font-bold text-lg">هیچ آیتمی یافت نشد!</h3>
+            <p className="text-sm whitespace-pre-wrap">
+              هیچ آیتم مورد علاقه‌ای ثبت نشده یا همه آیتم‌ها فیلتر شده‌اند.
+            </p>
           </div>
         </div>
       )}
@@ -212,7 +170,7 @@ export default function SearchKeywordPage() {
         freelancers={displayedFreelancers}
         activeTab={activeTab}
         onTabChange={setActiveTab}
-        isLoadingMore={isLoadingMore}
+        isLoadingMore={false} // بدون لودینگ
         favoriteItems={favoriteItems}
         onToggleFavorite={toggleFavorite}
       />
