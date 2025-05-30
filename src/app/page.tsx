@@ -10,7 +10,7 @@ export default function Home() {
   const [hasFavorites, setHasFavorites] = useState(false);
 
   useEffect(() => {
-    const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+    const favorites = JSON.parse(localStorage.getItem("favoriteItems") || "[]");
     if (Array.isArray(favorites) && favorites.length > 0) {
       setHasFavorites(true);
     }

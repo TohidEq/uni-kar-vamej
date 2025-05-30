@@ -11,7 +11,7 @@ export default function FavoritesLayout({
 }) {
   return (
     <div className="px-1 sm:p-4">
-      <Navbar enableFavoriteLink={true} />
+      <Navbar enableHomeBtn={true} />
       <Suspense
         fallback={
           <div
