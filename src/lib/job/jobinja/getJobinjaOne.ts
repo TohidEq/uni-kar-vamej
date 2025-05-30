@@ -17,5 +17,6 @@ export default async function getJobinjaOne(
     owner: "",
     location: null,
     jobType: null,
+    id: url,
   };
 }

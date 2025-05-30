@@ -15,7 +15,7 @@ export default function Home() {
       setHasFavorites(true);
     }
   }, []);
-  // TODO: font fix for main title and Shoaar and other...
+
   return (
     <div className="main min-h-screen flex flex-col">
       <Navbar enableFavoriteLink={hasFavorites} />

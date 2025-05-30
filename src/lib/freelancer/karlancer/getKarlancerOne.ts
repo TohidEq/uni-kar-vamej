@@ -81,6 +81,7 @@ export default async function getKarlancerOne(
       owner,
       location,
       jobType,
+      id: url,
     };
 
     // Ensure required fields are present

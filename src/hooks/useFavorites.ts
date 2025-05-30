@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 // import { JobItem, FreelancerItem } from "@/types/itemTypes";
 

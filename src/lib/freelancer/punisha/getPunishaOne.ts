@@ -62,6 +62,7 @@ export default async function getPunishaOne(
       owner,
       location,
       jobType,
+      id: url,
     };
 
     if (!item.url || !item.title) {

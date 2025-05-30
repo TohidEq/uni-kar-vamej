@@ -10,7 +10,7 @@ export default function SearchLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="px-1 sm:p-4">
+    <div className="px-1 sm:p-4 !pt-0">
       <Navbar enableFavoriteLink={true} />
       <Suspense
         fallback={

@@ -4,14 +4,14 @@ import React, { Suspense } from "react";
 import { Loader2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 
-export default function FavoritesLayout({
+export default function OneResultLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
     <div className="px-1 sm:p-4 !pt-0">
-      <Navbar enableHomeBtn={true} />
+      <Navbar enableHomeBtn={true} enableFavoriteLink={true} />
       <Suspense
         fallback={
           <div

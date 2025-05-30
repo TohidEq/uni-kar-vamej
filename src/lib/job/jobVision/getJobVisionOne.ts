@@ -80,6 +80,7 @@ export default async function getJobVisionOne(
       owner,
       location,
       jobType,
+      id: url,
     };
 
     // Ensure required fields are present

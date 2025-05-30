@@ -124,9 +124,9 @@ function parseSalaryRange(salaryText: string): {
 
 function cleanJobType(jobTypeText: string): string | null {
   const cleaned = jobTypeText
-    .replace(/\n/g, " ")
-    .replace(/\s+/g, " ")
-    .replace(/\(.*?\)/g, "")
+    // .replace(/\n/g, " ")
+    // .replace(/\s+/g, " ")
+    // .replace(/\(.*?\)/g, "")
     .trim();
   return cleaned || null;
 }
