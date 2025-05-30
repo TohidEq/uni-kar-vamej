@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { FaInfoCircle } from "react-icons/fa";
 import FilterBox from "@/components/search/FilterBox";
 import ResultsTabs from "@/components/search/ResultsTabs";
 import { useFavorites } from "@/hooks/useFavorites";
 // import { JobItem, FreelancerItem } from "@/types/itemTypes";
+import { sortItemsByPrice } from "@/utils/searchUtils";
 
 interface AggregatedResults {
   jobs: JobItem[];
@@ -14,6 +15,7 @@ interface AggregatedResults {
 
 type ActiveTabType = "jobs" | "freelancers";
 type SiteName = "karlancer" | "punisha" | "jobinja" | "jobvision";
+type SortOrderType = "none" | "asc" | "desc";
 
 const ALL_AVAILABLE_SITES: SiteName[] = [
   "karlancer",
@@ -27,6 +29,7 @@ export default function FavoritesPage() {
   console.log("FavoritesPage Rendering");
 
   const [activeTab, setActiveTab] = useState<ActiveTabType>("jobs");
+  const [sortOrder, setSortOrder] = useState<SortOrderType>("none");
   const [ignoredSites, setIgnoredSites] = useState<SiteName[]>([]);
   const [ignoredSites_apply, setIgnoredSites_apply] = useState<SiteName[]>([]);
   const [aggregatedResults, setAggregatedResults] = useState<AggregatedResults>(
@@ -72,13 +75,19 @@ export default function FavoritesPage() {
     console.log("++++++++++++++++++++++++++++++++++++");
   }, [favoriteItems]);
 
-  // Filter displayed results
-  const displayedJobs = aggregatedResults.jobs.filter(
-    (job) => !ignoredSites_apply.includes(job.type as SiteName)
+  // Filter and sort displayed results
+  const displayedJobs = sortItemsByPrice(
+    aggregatedResults.jobs.filter(
+      (job) => !ignoredSites_apply.includes(job.type as SiteName)
+    ),
+    sortOrder
   );
 
-  const displayedFreelancers = aggregatedResults.freelancers.filter(
-    (freelancer) => !ignoredSites_apply.includes(freelancer.type as SiteName)
+  const displayedFreelancers = sortItemsByPrice(
+    aggregatedResults.freelancers.filter(
+      (freelancer) => !ignoredSites_apply.includes(freelancer.type as SiteName)
+    ),
+    sortOrder
   );
 
   // Handle filter changes
@@ -97,7 +106,7 @@ export default function FavoritesPage() {
     <button
       className="btn btn-primary join-item rounded-full me-2 !px-3"
       onClick={() => setShowFilterBox(!showFilterBox)}
-      aria-label="نمایش/مخفی کردن فیلترها"
+      aria-label="نمایش/مخفی کردن فیلترها و مرتب‌سازی"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -138,13 +147,13 @@ export default function FavoritesPage() {
         allSites={ALL_AVAILABLE_SITES}
         ignoredSites={ignoredSites}
         onFilterChange={handleFilterChange}
-        sortOrder="none"
-        onSortChange={() => {}} // مرتب‌سازی غیرفعال
+        sortOrder={sortOrder}
+        onSortChange={setSortOrder}
         showFilterBox={showFilterBox}
       />
 
       {/* Page Title */}
-      <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold my-4 sm:mb-8 text-center text-primary">
+      <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 sm:mb-8 text-center text-primary">
         آیتم‌های مورد علاقه
       </h1>
 
