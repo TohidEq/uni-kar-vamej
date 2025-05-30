@@ -7,7 +7,9 @@ declare global {
   }
 
   interface SearchResult {
-    jobs: ?Jobitem[];
-    freelancers: ?FreelancerItem[];
+    jobs: JobItem[] | null;
+    freelancers: FreelancerItem[] | null;
   }
+
+  type SiteName = "karlancer" | "punisha" | "jobinja" | "jobvision";
 }

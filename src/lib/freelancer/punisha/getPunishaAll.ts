@@ -13,6 +13,7 @@ export default async function getPunishaAll(
     await page.goto(searchUrl(keyword, "punisha"), {
       waitUntil: "domcontentloaded", //DONE
       timeout: 0,
+      // timeout: 15000,
     });
 
     // Get the rendered HTML
@@ -48,6 +49,7 @@ export default async function getPunishaAll(
             .text()
             .trim() || null,
         owner: "ناشناخته",
+        id: `https://ponisha.ir${$(element).find("a.css-f8mog2").attr("href")}`,
       };
 
       // Ensure required fields are present

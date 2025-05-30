@@ -16,6 +16,7 @@ export default async function getKarlancerAll(
     await page.goto(searchUrl(keyword, "karlancer"), {
       waitUntil: "networkidle2", //DONE
       timeout: 0,
+      // timeout: 15000,
     });
 
     // Get the rendered HTML
@@ -49,6 +50,9 @@ export default async function getKarlancerAll(
             .find(".px-10.py-2px.fs-14.br-5.color-white.bg-acacac-color")
             .text()
             .trim() || "ناشناخته",
+        id: `https://www.karlancer.com${$(element)
+          .find("a[applinktarget]")
+          .attr("href")}`,
       };
 
       // Ensure required fields are present

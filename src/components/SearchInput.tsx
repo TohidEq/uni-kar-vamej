@@ -5,10 +5,12 @@ import { useRouter } from "next/navigation";
 
 export default function SearchInput({
   no_mx_auto = false,
+  default_value = null,
 }: {
   no_mx_auto?: boolean;
+  default_value?: string | null;
 }) {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(default_value || "");
   const router = useRouter();
 
   const handleSearch = () => {
@@ -31,6 +33,7 @@ export default function SearchInput({
       <div className="form-control flex flex-row w-full rounded-xl">
         <input
           type="search"
+          id="search-input"
           placeholder="جستجو کن..."
           className="input input-bordered rounded-3xl flex-grow"
           value={query}

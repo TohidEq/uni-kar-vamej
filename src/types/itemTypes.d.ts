@@ -10,6 +10,14 @@ declare global {
     image: ?string; // img url
     time: ?string;
     owner: string;
+
+    id: string;
+    // url: string;
+    // title: string;
+    // salary: string | number;
+    // // description?: string;
+    // type?: string;
+    // image?: string;
   }
 
   interface JobItem {
@@ -25,6 +33,17 @@ declare global {
     owner: string;
     location: ?string;
     jobType: ?string;
+
+    id: string;
+    // url: string;
+    // title: string;
+    // salaryStart: string | number;
+    // salaryEnd: string | number;
+    // // description?: string;
+    // location: string;
+    // jobType: string;
+    // type: string;
+    // image?: string;
   }
 
   interface SavedJobItem {

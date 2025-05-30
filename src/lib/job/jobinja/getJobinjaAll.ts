@@ -13,6 +13,7 @@ export default async function getJobinjaAll(
     await page.goto(searchUrl(keyword, "jobinja"), {
       waitUntil: "networkidle2", //DONE
       timeout: 0,
+      // timeout: 15000,
     });
 
     // await setTimeout(2000);
@@ -21,11 +22,11 @@ export default async function getJobinjaAll(
     const $ = cheerio.load(html);
 
     $(".c-jobListView__list .c-jobListView__item").each((i, element) => {
+      const url =
+        $(element).find(".c-jobListView__titleLink").attr("href") || "";
       const item: JobItem = {
         type: "jobinja",
-        url:
-          $(element).find(".c-jobListView__titleLink").attr("href") ||
-          "https://jobinja.ir/",
+        url: url,
         title: $(element)
           .find(".c-jobListView__titleLink")
           .text()
@@ -67,10 +68,12 @@ export default async function getJobinjaAll(
             .text()
             .trim()
         ),
+        id: url,
       };
 
       // Ensure required fields are present
       if (item.url && item.title) {
+        if (item.image?.includes("/assets/img/")) item.image = null;
         items.push(item);
       }
     });

@@ -13,6 +13,7 @@ export default async function getJobvisionAll(
     await page.goto(searchUrl(keyword, "jobvision"), {
       waitUntil: "domcontentloaded", //DONE
       timeout: 0,
+      // timeout: 15000,
     });
 
     await page.waitForSelector("job-card span.d-flex.align-items-center", {
@@ -62,6 +63,7 @@ export default async function getJobvisionAll(
             .text()
             .trim() || null,
         jobType: cleanJobType(jobTypeRaw),
+        id: `https://jobvision.ir${$(element).find("a").attr("href") || ""}`,
       };
 
       // Ensure required fields are present

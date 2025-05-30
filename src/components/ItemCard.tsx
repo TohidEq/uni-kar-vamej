@@ -1,6 +1,15 @@
 "use client";
+import Image from "next/image";
+// import { JobItem, FreelancerItem } from "@/types/itemTypes";
+
+interface ItemCardProps {
+  item: JobItem | FreelancerItem;
+  isFavorite: boolean;
+  onToggleFavorite: (item: JobItem | FreelancerItem) => void;
+}
+
 // src/components/ItemCard.tsx
-import React from "react";
+import React, { memo } from "react";
 import {
   FaHeart,
   FaRegHeart,
@@ -25,8 +34,7 @@ interface ItemCardProps {
   onToggleFavorite: (item: Item) => void;
 }
 
-const DEFAULT_IMAGE_URL_SQUARE =
-  "https://placehold.co/120x120/23262c/bdbb91?text=:)&font=tahoma"; // کمی بزرگتر برای وضوح بهتر
+const DEFAULT_IMAGE_URL_SQUARE = "/smile.svg"; // کمی بزرگتر برای وضوح بهتر
 
 const truncateText = (
   text: string | null | undefined,
@@ -45,7 +53,8 @@ const ItemCard: React.FC<ItemCardProps> = ({
   const { title, owner, salary, caption, time, image, url, type } = item;
 
   const displayCaption = truncateText(caption, 150); // طول توضیحات ممکن است نیاز به تنظیم داشته باشد
-  const isJobType = item.type === "jobinja" || item.type === "jobvision";
+  const isJobType = "jobinja jobvision".includes(item.type);
+  const hideDetailBtn = "jobinja".includes(item.type);
 
   const handleViewDetailsLocal = () => {
     try {
@@ -66,11 +75,16 @@ const ItemCard: React.FC<ItemCardProps> = ({
         <div className="flex items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
           {/* تصویر کوچک و گرد شده در سمت راست */}
           <div className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={image || DEFAULT_IMAGE_URL_SQUARE}
+              onError={(e) => {
+                e.currentTarget.src = DEFAULT_IMAGE_URL_SQUARE;
+              }}
               alt={title || "تصویر آگهی"}
-              className="w-full h-full object-cover rounded-xl shadow-md" // گردی بیشتر با rounded-xl
+              width={100}
+              height={100}
+              className="w-full object-cover rounded-xl"
+              loading="lazy"
             />
           </div>
 
@@ -142,15 +156,17 @@ const ItemCard: React.FC<ItemCardProps> = ({
               <FaExternalLinkAlt className="ml-1 sm:ml-2" />
               آگهی اصلی
             </a>
-            <Link href="/one-result" legacyBehavior>
-              <a
-                onClick={handleViewDetailsLocal}
-                className="btn btn-primary px-1.5 sm:!px-4 md:!px-6 btn-sm !text-xs sm:!text-sm !leading-none"
-              >
-                <FaInfoCircle className="ml-1 sm:ml-2" />
-                جزئیات
-              </a>
-            </Link>
+            {!hideDetailBtn && (
+              <Link href="/one-result" legacyBehavior>
+                <a
+                  onClick={handleViewDetailsLocal}
+                  className="btn btn-primary px-1.5 sm:!px-4 md:!px-6 btn-sm !text-xs sm:!text-sm !leading-none"
+                >
+                  <FaInfoCircle className="ml-1 sm:ml-2" />
+                  جزئیات
+                </a>
+              </Link>
+            )}
           </div>
 
           {/* دکمه قلب در سمت چپ */}
@@ -171,4 +187,4 @@ const ItemCard: React.FC<ItemCardProps> = ({
   );
 };
 
-export default ItemCard;
+export default memo(ItemCard);
