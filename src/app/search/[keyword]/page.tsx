@@ -43,7 +43,6 @@ export default function SearchKeywordPage() {
   );
   const { favoriteItems, toggleFavorite } = useFavorites();
 
-  
   const {
     results: rawResults,
     isLoading,
@@ -158,7 +157,10 @@ export default function SearchKeywordPage() {
       <div className="join w-full mb-3 print:hidden">
         <div className="flex join-item w-full justify-center">
           {fiterBtn}
-          <SearchInput no_mx_auto={true} default_value={keyword} />
+          <SearchInput
+            no_mx_auto={true}
+            default_value={decodeURIComponent(keyword)}
+          />
         </div>
       </div>
 
@@ -183,7 +185,7 @@ export default function SearchKeywordPage() {
 
       {/* Page Title */}
       <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold my-4 sm:mb-8 text-center text-primary">
-        نتایج جستجو برای: «{keyword}»
+        نتایج جستجو برای: «{decodeURIComponent(keyword)}»
       </h1>
 
       {/* Loading State */}
