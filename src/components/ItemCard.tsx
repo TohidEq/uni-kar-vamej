@@ -22,6 +22,7 @@ import {
   FaBuilding,
 } from "react-icons/fa";
 import Link from "next/link";
+import { PriceFormatter } from "@/utils/iranianMoneyUtils";
 
 // تایپ‌ها باید از فایل مربوطه import شوند
 // import type { JobItem, FreelancerItem } from "@/types/itemTypes";
@@ -54,7 +55,6 @@ const ItemCard: React.FC<ItemCardProps> = ({
 
   const displayCaption = truncateText(caption, 150); // طول توضیحات ممکن است نیاز به تنظیم داشته باشد
   const isJobType = "jobinja jobvision".includes(item.type);
-  const hideDetailBtn = "jobinja".includes(item.type);
 
   const handleViewDetailsLocal = () => {
     try {
@@ -106,12 +106,10 @@ const ItemCard: React.FC<ItemCardProps> = ({
               </div>
             )}
             {/* دستمزد */}
-            {salary && (
+            {(salary || salary === 0) && (
               <div className="flex items-center text-xs sm:text-sm text-primary font-semibold mb-1 sm:mb-1.5">
                 <FaDollarSign className="ml-1.5 w-3 h-3 sm:w-4 sm:h-4" />
-                <span>
-                  {String(salary) === "-1" ? "توافقی" : String(salary)}
-                </span>
+                <span>{salary < 1 ? "توافقی" : PriceFormatter(salary)}</span>
               </div>
             )}
             {/* مکان */}
@@ -156,17 +154,15 @@ const ItemCard: React.FC<ItemCardProps> = ({
               <FaExternalLinkAlt className="ml-1 sm:ml-2" />
               آگهی اصلی
             </a>
-            {!hideDetailBtn && (
-              <Link href="/one-result" legacyBehavior>
-                <a
-                  onClick={handleViewDetailsLocal}
-                  className="btn btn-primary px-1.5 sm:!px-4 md:!px-6 btn-sm !text-xs sm:!text-sm !leading-none"
-                >
-                  <FaInfoCircle className="ml-1 sm:ml-2" />
-                  جزئیات
-                </a>
-              </Link>
-            )}
+            <Link href="/one-result" legacyBehavior>
+              <a
+                onClick={handleViewDetailsLocal}
+                className="btn btn-primary px-1.5 sm:!px-4 md:!px-6 btn-sm !text-xs sm:!text-sm !leading-none"
+              >
+                <FaInfoCircle className="ml-1 sm:ml-2" />
+                جزئیات
+              </a>
+            </Link>
           </div>
 
           {/* دکمه قلب در سمت چپ */}

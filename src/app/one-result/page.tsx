@@ -19,6 +19,7 @@ import Link from "next/link";
 // import { JobItem, FreelancerItem } from "@/types/itemTypes";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useOneSearchResult } from "@/hooks/useOneSearchResult";
+import { PriceFormatter } from "@/utils/iranianMoneyUtils";
 
 const DEFAULT_IMAGE_URL_SQUARE = "/smile.svg";
 
@@ -106,6 +107,8 @@ export default function OneResultPage() {
     );
   }
 
+  const hideDetailBtn = "jobinja".includes(localItem!.type);
+
   return (
     <div
       className="container my-container rounded-box mx-auto p-2 sm:p-6 lg:p-8 bg-base-200 min-h-screen"
@@ -148,31 +151,33 @@ export default function OneResultPage() {
                 {displayItem.title}
               </h2>
               {displayItem.owner && (
-                <div className="flex items-center text-sm text-gray-600 mb-1.5 sm:mb-2">
+                <div className="flex items-center text-sm  opactiy-70 mb-1.5 sm:mb-2">
                   {isJobType ? (
-                    <FaBuilding className="ml-1.5 opacity-70 flex-shrink-0 w-4 h-4" />
+                    <FaBuilding className="ml-1.5 opacity-65 flex-shrink-0 w-4 h-4" />
                   ) : (
-                    <FaBriefcase className="ml-1.5 opacity-70 flex-shrink-0 w-4 h-4" />
+                    <FaBriefcase className="ml-1.5 opacity-65 flex-shrink-0 w-4 h-4" />
                   )}
                   <span className="truncate">{displayItem.owner}</span>
                 </div>
               )}
-              {displayItem.salary && (
+              {(displayItem.salary || displayItem.salary === 0) && (
                 <div className="flex items-center text-sm text-primary font-semibold mb-1.5 sm:mb-2">
                   <FaDollarSign className="ml-1.5 w-4 h-4" />
                   <span>
-                    {displayItem.salary === -1 ? "توافقی" : displayItem.salary}
+                    {displayItem.salary < 1
+                      ? "توافقی"
+                      : PriceFormatter(displayItem.salary)}
                   </span>
                 </div>
               )}
               {"location" in displayItem && displayItem.location && (
-                <div className="flex items-center text-sm text-gray-600 mb-1.5 sm:mb-2">
+                <div className="flex items-center text-sm  opactiy-70 mb-1.5 sm:mb-2">
                   <FaMapMarkerAlt className="ml-1.5 w-4 h-4" />
                   <span className="truncate">{displayItem.location}</span>
                 </div>
               )}
               {displayItem.time && (
-                <div className="flex items-center text-sm text-gray-600">
+                <div className="flex items-center text-sm  opactiy-70">
                   <FaClock className="ml-1.5 w-4 h-4" />
                   <span>{displayItem.time}</span>
                 </div>
@@ -212,18 +217,21 @@ export default function OneResultPage() {
                 <FaExternalLinkAlt className="ml-2" />
                 مشاهده آگهی اصلی
               </a>
-              <button
-                onClick={handleFetchDetails}
-                className="btn btn-primary px-4 sm:px-6 btn-sm text-sm leading-none flex items-center"
-                disabled={isFetching}
-              >
-                {isFetching ? (
-                  <FaSpinner className="animate-spin w-5 h-5 ml-2" />
-                ) : (
-                  <FaSync className="ml-2" />
-                )}
-                دریافت اطلاعات کامل
-              </button>
+
+              {!hideDetailBtn && (
+                <button
+                  onClick={handleFetchDetails}
+                  className="btn btn-primary px-4 sm:px-6 btn-sm text-sm leading-none flex items-center"
+                  disabled={isFetching}
+                >
+                  {isFetching ? (
+                    <FaSpinner className="animate-spin w-5 h-5 ml-2" />
+                  ) : (
+                    <FaSync className="ml-2" />
+                  )}
+                  دریافت اطلاعات کامل
+                </button>
+              )}
             </div>
             <button
               onClick={() => toggleFavorite(displayItem)}
@@ -242,7 +250,7 @@ export default function OneResultPage() {
 
       <Link
         href="/search"
-        className="btn btn-ghost mt-6 mx-auto block max-w-xs text-center"
+        className="btn btn-primary py-2 mt-6 mx-auto block max-w-xs text-center"
       >
         بازگشت به جستجو
       </Link>

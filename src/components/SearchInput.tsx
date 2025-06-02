@@ -17,7 +17,7 @@ export default function SearchInput({
     const trimmed = query.trim();
     if (!trimmed) return;
     // جایگزین کردن فاصله با + برای URL
-    const formattedQuery = encodeURIComponent(trimmed.replace(/\s+/g, "+"));
+    const formattedQuery = trimmed.replace(/\s+/g, "+");
     router.push(`/search/${formattedQuery}`);
   };
 
