@@ -42,6 +42,8 @@ export default function SearchKeywordPage() {
     }
   );
   const { favoriteItems, toggleFavorite } = useFavorites();
+
+  
   const {
     results: rawResults,
     isLoading,

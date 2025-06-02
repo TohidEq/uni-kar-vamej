@@ -62,4 +62,11 @@ declare global {
     jobItems: ?SavedJobItem[];
     freelancerItems: ?SavedFreelancerItem[];
   }
+
+  interface KeywordsData {
+    [key: string]: {
+      relatives: string[];
+      file_name: string;
+    };
+  }
 }

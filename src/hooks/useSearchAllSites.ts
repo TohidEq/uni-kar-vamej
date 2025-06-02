@@ -1,4 +1,5 @@
 "use client";
+import { getFileNameOfWord } from "@/utils/wordsUtils";
 // src/hooks/useSearchAllSites.ts
 import { useState, useEffect, useMemo, useRef } from "react";
 
@@ -89,37 +90,27 @@ export function useSearchAllSites(
 
     pendingRequestsRef.current = siteNamesToFetch.length;
 
-    siteNamesToFetch.forEach((siteName) => {
+    const { isExist, fileName } = getFileNameOfWord(keyword);
+
+    if (isExist && fileName) {
       fetch(
-        `/api/search?keyword=${encodeURIComponent(
-          keyword
-        )}&allowSites=${siteName}`
+        `https://raw.githubusercontent.com/TohidEq/uni-kar-vamej-data/main/data/${fileName}`
       )
         .then((res) => {
           if (!res.ok) {
-            const fetchError: SiteSpecificError = new Error(
-              `Failed to fetch data for ${siteName}. Status: ${res.status}`
-            );
-            fetchError.site = siteName;
+            const fetchError = new Error(`Failed to fetch data from GitHub`);
             throw fetchError;
           }
           return res.json() as Promise<ApiSearchResponse>;
         })
         .then((data: ApiSearchResponse) => {
-          setResults((prevResults) => {
-            let siteData: JobItem[] | FreelancerItem[] | null = null;
-            const config = SITES_CONFIG[siteName];
-
-            if (config.type === "freelancer") {
-              siteData = data.freelancers || config.default;
-            } else {
-              siteData = data.jobs || config.default;
-            }
-
-            return {
-              ...prevResults,
-              [siteName]: siteData,
-            };
+          setResults({
+            karlancer: data.freelancers.filter(
+              (item) => item.type == "karlancer"
+            ),
+            punisha: data.freelancers.filter((item) => item.type == "punisha"),
+            jobinja: data.jobs.filter((item) => item.type == "jobinja"),
+            jobvision: data.jobs.filter((item) => item.type == "jobvision"),
           });
 
           if (!firstSuccessProcessedRef.current) {
@@ -127,22 +118,8 @@ export function useSearchAllSites(
             firstSuccessProcessedRef.current = true;
           }
         })
-        .catch((err: Error | SiteSpecificError) => {
-          const siteNameForError = (err as SiteSpecificError).site || siteName;
-
-          console.error(
-            `Error fetching data for ${siteNameForError}:`,
-            err.message
-          );
-          setError((prevError) => {
-            const message =
-              err.message || `Error with site: ${siteNameForError}`;
-            return prevError ? `${prevError}\n${message}` : message;
-          });
-          setResults((prevResults) => ({
-            ...prevResults,
-            [siteNameForError]: null,
-          }));
+        .catch((err: Error) => {
+          console.error(err.message);
         })
         .finally(() => {
           pendingRequestsRef.current -= 1;
@@ -153,7 +130,74 @@ export function useSearchAllSites(
             setIsLoading(false);
           }
         });
-    });
+    } else {
+      siteNamesToFetch.forEach((siteName) => {
+        fetch(`/api/search?keyword=${keyword}&allowSites=${siteName}`)
+          .then((res) => {
+            if (!res.ok) {
+              const fetchError: SiteSpecificError = new Error(
+                `Failed to fetch data for ${siteName}. Status: ${res.status}`
+              );
+              fetchError.site = siteName;
+              throw fetchError;
+            }
+            return res.json() as Promise<ApiSearchResponse>;
+          })
+          .then((data: ApiSearchResponse) => {
+            setResults((prevResults) => {
+              let siteData: JobItem[] | FreelancerItem[] | null = null;
+              const config = SITES_CONFIG[siteName];
+
+              if (config.type === "freelancer") {
+                siteData = data.freelancers || config.default;
+              } else {
+                siteData = data.jobs || config.default;
+              }
+
+              return {
+                ...prevResults,
+                [siteName]: siteData,
+              };
+            });
+
+            if (!firstSuccessProcessedRef.current) {
+              setIsLoading(false);
+              firstSuccessProcessedRef.current = true;
+            }
+          })
+          .catch((err: Error | SiteSpecificError) => {
+            const siteNameForError =
+              (err as SiteSpecificError).site || siteName;
+
+            console.error(
+              `Error fetching data for ${siteNameForError}:`,
+              err.message
+            );
+            setError((prevError) => {
+              const message =
+                err.message || `Error with site: ${siteNameForError}`;
+              return prevError ? `${prevError}\n${message}` : message;
+            });
+            setResults((prevResults) => ({
+              ...prevResults,
+              [siteNameForError]: null,
+            }));
+          })
+          .finally(() => {
+            pendingRequestsRef.current -= 1;
+            if (
+              pendingRequestsRef.current === 0 &&
+              !firstSuccessProcessedRef.current
+            ) {
+              setIsLoading(false);
+            }
+          });
+      });
+    }
+
+    //
+
+    //
   }, [keyword, stableIgnoredSites]);
 
   return { results, isLoading, error };
