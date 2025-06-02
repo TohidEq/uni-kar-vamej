@@ -90,7 +90,9 @@ export function useSearchAllSites(
 
     pendingRequestsRef.current = siteNamesToFetch.length;
 
-    const { isExist, fileName } = getFileNameOfWord(keyword);
+    const { isExist, fileName } = getFileNameOfWord(
+      keyword.replaceAll("+", " ")
+    );
 
     if (isExist && fileName) {
       fetch(
@@ -132,7 +134,12 @@ export function useSearchAllSites(
         });
     } else {
       siteNamesToFetch.forEach((siteName) => {
-        fetch(`/api/search?keyword=${keyword}&allowSites=${siteName}`)
+        fetch(
+          `/api/search?keyword=${keyword.replaceAll(
+            "+",
+            " "
+          )}&allowSites=${siteName}`
+        )
           .then((res) => {
             if (!res.ok) {
               const fetchError: SiteSpecificError = new Error(

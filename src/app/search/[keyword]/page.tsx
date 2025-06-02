@@ -159,7 +159,7 @@ export default function SearchKeywordPage() {
           {fiterBtn}
           <SearchInput
             no_mx_auto={true}
-            default_value={decodeURIComponent(keyword)}
+            default_value={decodeURIComponent(keyword).replaceAll("+", " ")}
           />
         </div>
       </div>
@@ -185,7 +185,7 @@ export default function SearchKeywordPage() {
 
       {/* Page Title */}
       <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold my-4 sm:mb-8 text-center text-primary">
-        نتایج جستجو برای: «{decodeURIComponent(keyword)}»
+        نتایج جستجو برای: «{decodeURIComponent(keyword).replaceAll("+", " ")}»
       </h1>
 
       {/* Loading State */}
