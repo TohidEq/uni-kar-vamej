@@ -3,7 +3,7 @@ import { searchUrl } from "@/lib/searchUrl";
 import { parseSalary } from "@/lib/parseSalary";
 import { Page } from "puppeteer";
 
-export default async function getPunishaAll(
+export default async function getPonishaAll(
   keyword: string,
   page: Page
 ): Promise<FreelancerItem[] | null> {

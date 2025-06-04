@@ -2,7 +2,7 @@ import * as cheerio from "cheerio";
 import { Page } from "puppeteer";
 import { persianToEnglishNumber } from "../../parseSalary";
 
-export default async function getPunishaOne(
+export default async function getPonishaOne(
   url: string,
   page: Page
 ): Promise<JobItem | null> {
@@ -66,13 +66,13 @@ export default async function getPunishaOne(
     };
 
     if (!item.url || !item.title) {
-      console.warn("Missing required fields for Punisha item:", { url, title });
+      console.warn("Missing required fields for Ponisha item:", { url, title });
       return null;
     }
 
     return item;
   } catch (error) {
-    console.error("Error scraping Punisha for URL:", url);
+    console.error("Error scraping Ponisha for URL:", url);
     console.error(error);
     return null;
   }

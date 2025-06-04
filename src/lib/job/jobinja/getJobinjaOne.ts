@@ -3,7 +3,7 @@ export default async function getJobinjaOne(
   url: string
   // page: Page
 ): Promise<JobItem> {
-  // Needs a Punisha Account
+  // Needs a Ponisha Account
   return {
     type: "",
     url: url,

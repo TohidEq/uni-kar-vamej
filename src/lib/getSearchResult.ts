@@ -1,5 +1,5 @@
 import getKarlancerAll from "./freelancer/karlancer/getKarlancerAll";
-import getPunishaAll from "./freelancer/ponisha/getPonishaAll";
+import getPonishaAll from "./freelancer/ponisha/getPonishaAll";
 import { ALL_SITES, getBrowser } from "./globalVars";
 import getJobinjaAll from "./job/jobinja/getJobinjaAll";
 import getJobvisionAll from "./job/jobVision/getJobVisionAll";
@@ -34,7 +34,7 @@ export default async function getSearchResult(
         break;
       }
       case ALL_SITES["freelancer"][1]: {
-        const ponishaResults = await getPunishaAll(Props.keyword, page);
+        const ponishaResults = await getPonishaAll(Props.keyword, page);
         resultCounter = ponishaResults?.length || 0;
         if (ponishaResults?.length) {
           results.freelancers.push(...ponishaResults);
