@@ -50,7 +50,7 @@ export default async function getPunishaOne(
       .replace("کارفرما این پروژه است.", "");
 
     const item: JobItem = {
-      type: "punisha",
+      type: "ponisha",
       url,
       title,
       caption,

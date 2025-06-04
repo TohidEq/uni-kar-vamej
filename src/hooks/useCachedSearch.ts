@@ -9,7 +9,7 @@ interface CachedSearchResult {
     jobinja: JobItem[] | null;
     jobvision: JobItem[] | null;
     karlancer: FreelancerItem[] | null;
-    punisha: FreelancerItem[] | null;
+    ponisha: FreelancerItem[] | null;
   }>;
   timestamp: number;
 }

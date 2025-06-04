@@ -1,5 +1,5 @@
 import getKarlancerOne from "./freelancer/karlancer/getKarlancerOne";
-import getPunishaOne from "./freelancer/punisha/getPunishaOne";
+import getPunishaOne from "./freelancer/ponisha/getPunishaOne";
 import getJobinjaOne from "./job/jobinja/getJobinjaOne";
 import getJobVisionOne from "./job/jobVision/getJobVisionOne";
 import { ALL_SITES, getBrowser } from "./globalVars";

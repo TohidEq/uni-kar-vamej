@@ -14,12 +14,12 @@ interface AggregatedResults {
 }
 
 type ActiveTabType = "jobs" | "freelancers";
-type SiteName = "karlancer" | "punisha" | "jobinja" | "jobvision";
+type SiteName = "karlancer" | "ponisha" | "jobinja" | "jobvision";
 type SortOrderType = "none" | "asc" | "desc";
 
 const ALL_AVAILABLE_SITES: SiteName[] = [
   "karlancer",
-  "punisha",
+  "ponisha",
   "jobinja",
   "jobvision",
 ];
@@ -66,7 +66,7 @@ export default function FavoritesPage() {
     );
     const freelancers: FreelancerItem[] = favoriteItems.filter(
       (item): item is FreelancerItem =>
-        item.type === "karlancer" || item.type === "punisha"
+        item.type === "karlancer" || item.type === "ponisha"
     );
 
     setAggregatedResults({ jobs, freelancers });

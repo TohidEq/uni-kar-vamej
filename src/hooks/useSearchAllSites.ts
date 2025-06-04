@@ -5,7 +5,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 
 const SITES_CONFIG = {
   karlancer: { type: "freelancer" as const, default: [] as FreelancerItem[] },
-  punisha: { type: "freelancer" as const, default: [] as FreelancerItem[] },
+  ponisha: { type: "freelancer" as const, default: [] as FreelancerItem[] },
   jobinja: { type: "job" as const, default: [] as JobItem[] },
   jobvision: { type: "job" as const, default: [] as JobItem[] },
 };
@@ -14,7 +14,7 @@ export type SiteName = keyof typeof SITES_CONFIG;
 
 export interface SearchResults {
   karlancer: FreelancerItem[] | null;
-  punisha: FreelancerItem[] | null;
+  ponisha: FreelancerItem[] | null;
   jobinja: JobItem[] | null;
   jobvision: JobItem[] | null;
 }
@@ -34,7 +34,7 @@ export function useSearchAllSites(
 ) {
   const [results, setResults] = useState<SearchResults>({
     karlancer: null,
-    punisha: null,
+    ponisha: null,
     jobinja: null,
     jobvision: null,
   });
@@ -57,7 +57,7 @@ export function useSearchAllSites(
     if (!keyword.trim()) {
       setResults({
         karlancer: null,
-        punisha: null,
+        ponisha: null,
         jobinja: null,
         jobvision: null,
       });
@@ -70,7 +70,7 @@ export function useSearchAllSites(
 
     setResults({
       karlancer: null,
-      punisha: null,
+      ponisha: null,
       jobinja: null,
       jobvision: null,
     });
@@ -110,7 +110,7 @@ export function useSearchAllSites(
             karlancer: data.freelancers.filter(
               (item) => item.type == "karlancer"
             ),
-            punisha: data.freelancers.filter((item) => item.type == "punisha"),
+            ponisha: data.freelancers.filter((item) => item.type == "ponisha"),
             jobinja: data.jobs.filter((item) => item.type == "jobinja"),
             jobvision: data.jobs.filter((item) => item.type == "jobvision"),
           });

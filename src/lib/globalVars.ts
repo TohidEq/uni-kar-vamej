@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer";
 
 export const ALL_SITES = {
-  freelancer: ["karlancer", "punisha"],
+  freelancer: ["karlancer", "ponisha"],
   job: ["jobinja", "jobvision"],
 };
 

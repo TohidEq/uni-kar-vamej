@@ -10,7 +10,7 @@ export default async function getPunishaAll(
   const items: FreelancerItem[] = [];
 
   try {
-    await page.goto(searchUrl(keyword, "punisha"), {
+    await page.goto(searchUrl(keyword, "ponisha"), {
       waitUntil: "domcontentloaded", //DONE
       timeout: 0,
       // timeout: 15000,
@@ -23,7 +23,7 @@ export default async function getPunishaAll(
     // Ponisha typically uses a project card structure; adjust selector based on inspection
     $(".css-4obuzx>.breakpoint").each((i, element) => {
       const item: FreelancerItem = {
-        type: "punisha",
+        type: "ponisha",
         url: `https://ponisha.ir${$(element)
           .find("a.css-f8mog2")
           .attr("href")}`,

@@ -21,7 +21,7 @@ type SortOrderType = "none" | "asc" | "desc";
 
 const ALL_AVAILABLE_SITES: SiteName[] = [
   "karlancer",
-  "punisha",
+  "ponisha",
   "jobinja",
   "jobvision",
 ];
@@ -80,7 +80,7 @@ export default function SearchKeywordPage() {
     ];
     const freelancers: FreelancerItem[] = [
       ...(rawResults.karlancer ?? []),
-      ...(rawResults.punisha ?? []),
+      ...(rawResults.ponisha ?? []),
     ];
 
     setAggregatedResults({ jobs, freelancers });

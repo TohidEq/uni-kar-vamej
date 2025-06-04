@@ -11,5 +11,5 @@ declare global {
     freelancers: FreelancerItem[] | null;
   }
 
-  type SiteName = "karlancer" | "punisha" | "jobinja" | "jobvision";
+  type SiteName = "karlancer" | "ponisha" | "jobinja" | "jobvision";
 }
