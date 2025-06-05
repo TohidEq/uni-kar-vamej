@@ -23,7 +23,6 @@ export default async function getKarlancerAll(
     const html = await page.content();
     const $ = cheerio.load(html);
 
-    // Target project cards (assuming 'app-sidebar-project-card' from your earlier example)
     $("app-sidebar-project-card").each((i, element) => {
       const item: FreelancerItem = {
         type: "karlancer",

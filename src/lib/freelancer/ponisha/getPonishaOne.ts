@@ -8,7 +8,8 @@ export default async function getPonishaOne(
 ): Promise<JobItem | null> {
   try {
     await page.goto(url, {
-      waitUntil: "domcontentloaded", // DONE
+      // waitUntil: "domcontentloaded", // DONE
+      waitUntil: "networkidle2",
       timeout: 0,
     });
 

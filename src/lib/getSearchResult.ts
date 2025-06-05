@@ -12,6 +12,8 @@ export default async function getSearchResult(
     freelancers: [],
   };
 
+  
+
   console.log("keyword:", Props.keyword);
   const browser = await getBrowser();
   const page = await browser.newPage();

@@ -47,6 +47,7 @@ export default function SearchKeywordPage() {
     results: rawResults,
     isLoading,
     error,
+    endSearch,
   } = useSearchAllSites(keyword, ignoredSites_apply);
 
   // Log rawResults for debugging
@@ -111,7 +112,7 @@ export default function SearchKeywordPage() {
     displayedFreelancers.length === 0 &&
     !error;
 
-  const isLoadingMore = isLoading && !isInitialLoading;
+  const isLoadingMore = !endSearch && isLoading && !isInitialLoading;
 
   // Handle filter changes
   const handleFilterChange = (site: SiteName, isChecked: boolean) => {

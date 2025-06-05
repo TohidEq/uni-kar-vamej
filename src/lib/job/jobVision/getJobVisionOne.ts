@@ -9,7 +9,8 @@ export default async function getJobVisionOne(
   try {
     // Navigate to the provided URL
     await page.goto(url, {
-      waitUntil: "domcontentloaded", // DONE
+      // waitUntil: "domcontentloaded", // DONE
+      waitUntil: "networkidle2",
       timeout: 0,
     });
 

@@ -11,7 +11,8 @@ export default async function getPonishaAll(
 
   try {
     await page.goto(searchUrl(keyword, "ponisha"), {
-      waitUntil: "domcontentloaded", //DONE
+      // waitUntil: "domcontentloaded", //DONE
+      waitUntil: "networkidle2",
       timeout: 0,
       // timeout: 15000,
     });

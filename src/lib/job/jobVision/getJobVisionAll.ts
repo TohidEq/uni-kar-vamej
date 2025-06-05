@@ -11,7 +11,8 @@ export default async function getJobvisionAll(
 
   try {
     await page.goto(searchUrl(keyword, "jobvision"), {
-      waitUntil: "domcontentloaded", //DONE
+      // waitUntil: "domcontentloaded", //DONE
+      waitUntil: "networkidle2",
       timeout: 0,
       // timeout: 15000,
     });

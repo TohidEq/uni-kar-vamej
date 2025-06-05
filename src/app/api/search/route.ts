@@ -4,13 +4,16 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const keyword = searchParams.get("keyword");
+  const keyword = searchParams.get("keyword")?.replaceAll("+", " ");
   const allowSites = searchParams.get("allowSites")?.split(",") || [];
 
   // Remove sites that are Denied
-  const searchableSites = [...ALL_SITES.freelancer, ...ALL_SITES.job].filter(
-    (item) => allowSites.includes(item)
-  );
+  const searchableSites =
+    allowSites[0] == "all"
+      ? [...ALL_SITES.freelancer, ...ALL_SITES.job]
+      : [...ALL_SITES.freelancer, ...ALL_SITES.job].filter((item) =>
+          allowSites.includes(item)
+        );
 
   if (!keyword) {
     return NextResponse.json(

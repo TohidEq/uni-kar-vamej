@@ -1,34 +1,60 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { FaSpinner } from "react-icons/fa";
+
+interface SearchInputProps {
+  no_mx_auto?: boolean;
+  default_value?: string | null;
+}
 
 export default function SearchInput({
   no_mx_auto = false,
   default_value = null,
-}: {
-  no_mx_auto?: boolean;
-  default_value?: string | null;
-}) {
+}: SearchInputProps) {
   const [query, setQuery] = useState(default_value || "");
-  const [isLoading, setIsLoading] = useState(false); // State for loading
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleSearch = () => {
-    const trimmed = query.trim();
-    if (!trimmed) return;
+  useEffect(() => {
+    setQuery(default_value || "");
+  }, [default_value]);
 
-    setIsLoading(true); // Start loading
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
-    // جایگزین کردن فاصله با + برای URL
-    const formattedQuery = trimmed.replace(/\s+/g, "+");
-    router.push(`/search/${formattedQuery}`);
-  };
+  const handleSearch = useCallback(() => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+    const trimmedQuery = query.trim();
+    if (!trimmedQuery) return;
+
+    setIsLoading(true);
+    const formattedQuery = encodeURIComponent(
+      trimmedQuery.replace(/\s+/g, "+")
+    );
+    const targetPath = `/search/${formattedQuery}`;
+
+    if (targetPath === pathname) {
+      router.refresh();
+    } else {
+      router.push(targetPath);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      setIsLoading(false);
+      timeoutRef.current = null;
+    }, 700);
+  }, [query, pathname, router]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && !isLoading) {
-      // Prevent double trigger if already loading
       e.preventDefault();
       handleSearch();
     }
@@ -46,16 +72,16 @@ export default function SearchInput({
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
           dir="rtl"
-          disabled={isLoading} // Disable input while loading
+          disabled={isLoading}
         />
         <button
           className="btn btn-primary rounded-3xl px-3 ms-2"
           onClick={handleSearch}
           aria-label="جستجو"
-          disabled={isLoading} // Disable button while loading
+          disabled={isLoading}
         >
           {isLoading ? (
-            <FaSpinner className="w-5 h-5 animate-spin" /> // Show spinner if loading
+            <FaSpinner className="w-5 h-5 animate-spin" />
           ) : (
             <svg
               className="w-5 h-5"
