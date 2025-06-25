@@ -54,13 +54,45 @@
     cd uni-kar-vamej
     ```
 3.  **نصب وابستگی‌ها:**
+
     ```bash
     npm install
     ```
+
+    - شاید نیاز باشه `.env.local` بسازید:
+    - اول `npx puppeteer browsers install chrome` اجرا کنید و در مسیر روت برنامه فایل `.env.local` را بسازید با این محتوا:
+
+      > - {USER NAME} == natijeye dastoore `whoami`
+      >
+      > - {VERSION} == دستی برو به اون مسیر ببین اسم پوشه اش چیه؟ همون
+      >
+      > یعنی بزن:
+      >
+      > ```bash
+      > ls ~/.cache/puppeteer/chrome/
+      > ```
+      >
+      > محتوای فایل `.env.local`:
+      >
+      > ```bash
+      > PUPPETEER_EXECUTABLE_PATH=/home/{USER NAME}/.cache/puppeteer/chrome/linux-{VERSION}/chrome-linux64/chrome
+      > PUPPETEER_CACHE_DIR=/home/{USER NAME}/.cache/puppeteer/
+      > ```
+
 4.  **اجرا:**
+
     ```bash
     npm run dev
     ```
+
+    - برای اجرا در سرعت بالا تر و بهینه تر
+      > ```bash
+      > # این کامند یک مقداری طول میکشه
+      > npm run build
+      > # اجرای سریع تر و بهینه تر
+      > npm run start
+      > ```
+
 5.  **دسترسی به اپلیکیشن:** پس از اجرا، می‌توانید با مراجعه به آدرس <http://localhost:3000> از اپلیکیشن استفاده کنید.
 
 ## مشارکت 🙏
@@ -102,32 +134,32 @@
 
 <details>
   <summary>صفحه اصلی</summary>
-  <img src="https://github.com/tohideq/uni-kar-vamej/blob/main/screenshots/home.png" alt="صفحه اصلی کاروامج" width="700"/>
+  <img src="./screenshots/home.png" alt="صفحه اصلی کاروامج" width="700"/>
 </details>
 
 <details>
   <summary>صفحه جستجو</summary>
-  <img src="https://github.com/tohideq/uni-kar-vamej/blob/main/screenshots/search.png" alt="صفحه جستجو نتایج" width="700"/>
+  <img src="./screenshots/search.png" alt="صفحه جستجو نتایج" width="700"/>
 </details>
 
 <details>
   <summary>صفحه علاقه‌مندی‌ها</summary>
-  <img src="https://github.com/tohideq/uni-kar-vamej/blob/main/screenshots/favorites.png" alt="صفحه علاقه‌مندی‌ها" width="700"/>
+  <img src="./screenshots/favorites.png" alt="صفحه علاقه‌مندی‌ها" width="700"/>
 </details>
 
 <details>
   <summary>صفحه درباره‌ی پروژه</summary>
-  <img src="https://github.com/tohideq/uni-kar-vamej/blob/main/screenshots/about.png" alt="صفحه درباره پروژه" width="700"/>
+  <img src="./screenshots/about.png" alt="صفحه درباره پروژه" width="700"/>
 </details>
 
 <details>
   <summary>صفحه اطلاعات بیشتر</summary>
-  <img src="https://github.com/tohideq/uni-kar-vamej/blob/main/screenshots/one-result.png" alt="صفحه جزییات آگهی" width="700"/>
+  <img src="./screenshots/one-result.png" alt="صفحه جزییات آگهی" width="700"/>
 </details>
 
 <details>
   <summary>Footer</summary>
-  <img src="https://github.com/tohideq/uni-kar-vamej/blob/main/screenshots/footer.png" alt="footer" width="700"/>
+  <img src="./screenshots/footer.png" alt="footer" width="700"/>
 </details>
 
 <br>
@@ -138,57 +170,57 @@
 
 <details>
   <summary>Light Theme</summary>
-  <img src="https://github.com/tohideq/uni-kar-vamej/blob/main/screenshots/themes/light.png" alt="Light Theme" width="300"/>
+  <img src="./screenshots/themes/light.png" alt="Light Theme" width="300"/>
 </details>
 
 <details>
   <summary>Dark Theme</summary>
-  <img src="https://github.com/tohideq/uni-kar-vamej/blob/main/screenshots/themes/dark.png" alt="Dark Theme" width="300"/>
+  <img src="./screenshots/themes/dark.png" alt="Dark Theme" width="300"/>
 </details>
 
 <details>
   <summary>Retro Theme</summary>
-  <img src="https://github.com/tohideq/uni-kar-vamej/blob/main/screenshots/themes/retro.png" alt="Retro Theme" width="300"/>
+  <img src="./screenshots/themes/retro.png" alt="Retro Theme" width="300"/>
 </details>
 
 <details>
   <summary>Fantasy Theme</summary>
-  <img src="https://github.com/tohideq/uni-kar-vamej/blob/main/screenshots/themes/fantasy.png" alt="Fantasy Theme" width="300"/>
+  <img src="./screenshots/themes/fantasy.png" alt="Fantasy Theme" width="300"/>
 </details>
 
 <details>
   <summary>Emerald Theme</summary>
-  <img src="https://github.com/tohideq/uni-kar-vamej/blob/main/screenshots/themes/emerald.png" alt="Emerald Theme" width="300"/>
+  <img src="./screenshots/themes/emerald.png" alt="Emerald Theme" width="300"/>
 </details>
 
 <details>
   <summary>Silk Theme</summary>
-  <img src="https://github.com/tohideq/uni-kar-vamej/blob/main/screenshots/themes/silk.png" alt="Silk Theme" width="300"/>
+  <img src="./screenshots/themes/silk.png" alt="Silk Theme" width="300"/>
 </details>
 
 <details>
   <summary>Corporate Theme</summary>
-  <img src="https://github.com/tohideq/uni-kar-vamej/blob/main/screenshots/themes/corporate.png" alt="Corporate Theme" width="300"/>
+  <img src="./screenshots/themes/corporate.png" alt="Corporate Theme" width="300"/>
 </details>
 
 <details>
   <summary>Autumn Theme</summary>
-  <img src="https://github.com/tohideq/uni-kar-vamej/blob/main/screenshots/themes/autumn.png" alt="Autumn Theme" width="300"/>
+  <img src="./screenshots/themes/autumn.png" alt="Autumn Theme" width="300"/>
 </details>
 
 <details>
   <summary>Abyss Theme</summary>
-  <img src="https://github.com/tohideq/uni-kar-vamej/blob/main/screenshots/themes/abyss.png" alt="Abyss Theme" width="300"/>
+  <img src="./screenshots/themes/abyss.png" alt="Abyss Theme" width="300"/>
 </details>
 
 <details>
   <summary>Dracula Theme</summary>
-  <img src="https://github.com/tohideq/uni-kar-vamej/blob/main/screenshots/themes/dracula.png" alt="Dracula Theme" width="300"/>
+  <img src="./screenshots/themes/dracula.png" alt="Dracula Theme" width="300"/>
 </details>
 
 <details>
   <summary>Halloween Theme</summary>
-  <img src="https://github.com/tohideq/uni-kar-vamej/blob/main/screenshots/themes/halloween.png" alt="Halloween Theme" width="300"/>
+  <img src="./screenshots/themes/halloween.png" alt="Halloween Theme" width="300"/>
 </details>
 
 </div>
@@ -196,8 +228,6 @@
 ## انتشار 🚀
 
 منتظر انتشار نسخه های بعدی کاروامج باشید.
-
-
 
 ---
 
