@@ -14,7 +14,7 @@
     "cheerio": "^1.0.0",
     "daisyui": "^5.0.35",
     "lucide-react": "^0.511.0",
-    "next": "15.4.8",
+    "next": "15.4.10",
     "puppeteer": "^24.6.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
